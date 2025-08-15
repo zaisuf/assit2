@@ -283,7 +283,7 @@ const AGSidebar: React.FC<AGSidebarProps & { hideOverlays?: boolean; closeVoiceS
                     title={logo}
                     onClick={() => setSelectedChatbotLogo && setSelectedChatbotLogo(logo)}
                   >
-                    <img src={logo} alt="Chatbot Logo" className="w-10 h-10 rounded-full" />
+                    <Image src={logo} width={40} height={40} alt="Chatbot Logo" className="rounded-full" />
                   </button>
                 ))}
               </div>
@@ -315,7 +315,7 @@ const AGSidebar: React.FC<AGSidebarProps & { hideOverlays?: boolean; closeVoiceS
                     title={logo}
                     onClick={() => setSelectedVoiceBotLogo && setSelectedVoiceBotLogo(logo)}
                   >
-                    <img src={logo} alt="Voice Bot Logo" className="w-10 h-10 rounded-full" />
+                    <Image src={logo} width={40} height={40} alt="Voice Bot Logo" className="rounded-full" />
                   </button>
                 ))}
               </div>
@@ -341,11 +341,11 @@ const AGSidebar: React.FC<AGSidebarProps & { hideOverlays?: boolean; closeVoiceS
               <div className="flex gap-4 items-center mb-2">
                 <div className="flex flex-col items-center">
                   <span className="text-white/60 text-xs">Chatbot</span>
-                  <img src={selectedChatbotLogo} alt="Selected Chatbot Logo" className="w-10 h-10 rounded-full border-2 border-emerald-400" />
+                  <Image src={selectedChatbotLogo} width={40} height={40} alt="Selected Chatbot Logo" className="rounded-full border-2 border-emerald-400" />
                 </div>
                 <div className="flex flex-col items-center">
                   <span className="text-white/60 text-xs">Voice Bot</span>
-                  <img src={selectedVoiceBotLogo} alt="Selected Voice Bot Logo" className="w-10 h-10 rounded-full border-2 border-blue-400" />
+                  <Image src={selectedVoiceBotLogo} width={40} height={40} alt="Selected Voice Bot Logo" className="rounded-full border-2 border-blue-400" />
                 </div>
               </div>
             </div>
