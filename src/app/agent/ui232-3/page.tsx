@@ -371,8 +371,9 @@ const CHATBOT_UI_TEMPLATES = [
 const ModernAIAssistantElevenLabs: React.FC = () => {
   // State declarations (move above callWithRetry)
   // ...existing code...
-    // State declarations (move above callGroqAPI)
-    const [messages, setMessages] = useState<Message[]>([]);
+  // State declarations (move above callGroqAPI)
+  const [lastApiCall, setLastApiCall] = useState<number>(0);
+  const [messages, setMessages] = useState<Message[]>([]);
   // Move callGroqAPI and processResponse above all hooks that reference them
   const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -515,7 +516,7 @@ const ModernAIAssistantElevenLabs: React.FC = () => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState("");
   // ...existing code...
-  const [lastApiCall, setLastApiCall] = useState<number>(0);
+  // ...existing code...
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState<string>("en");
