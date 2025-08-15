@@ -15,7 +15,7 @@ const Pricing: React.FC = () => {
 
   const plans = [
     {
-      name: 'Starter',
+    name: 'Starter',
       price: '$29',
       billing: 'per month',
       description: 'Perfect for small businesses just getting started',
@@ -31,7 +31,7 @@ const Pricing: React.FC = () => {
     },
     {
       name: 'Professional',
-      price: '$99',
+    price: '$99',
       billing: 'per month',
       description: 'Ideal for growing businesses',
       credits: '5,000 API calls',
@@ -48,7 +48,7 @@ const Pricing: React.FC = () => {
     },
     {
       name: 'Enterprise',
-      price: '$299',
+    price: '$299',
       billing: 'per month',
       description: 'For large-scale operations',
       credits: '20,000 API calls',
