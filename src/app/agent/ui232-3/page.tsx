@@ -515,9 +515,9 @@ const ModernAIAssistantElevenLabs: React.FC = () => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState("");
   // ...existing code...
+  const [lastApiCall, setLastApiCall] = useState<number>(0);
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [lastApiCall, setLastApiCall] = useState<number>(0);
   const [selectedLanguage, setSelectedLanguage] = useState<string>("en");
   const [showUiOverlay, setShowUiOverlay] = useState(false);
   const [sidebarOverlay, setSidebarOverlay] = useState<string | null>(null);
@@ -2287,3 +2287,4 @@ const LOADING_ANIMATIONS = [
     ),
   },
 ];
+
