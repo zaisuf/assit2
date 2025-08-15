@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 
 type Message = {
   role: "user" | "assistant";
@@ -445,7 +446,6 @@ export default function RenderUiDesign({ designId, onFetchedContent }: RenderUiD
 
   // Import VoiceCallContainer directly from the voicecall component
   // @ts-ignore
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { VoiceCallContainer } = require("@/app/agent/components/voicecall");
   // If VoiceCallContainer is not exported as named, fallback to default
   const VoiceCall = VoiceCallContainer || require("@/app/agent/components/voicecall").default || (() => null);
@@ -485,9 +485,11 @@ export default function RenderUiDesign({ designId, onFetchedContent }: RenderUiD
                   </button>
                 )}
                 {w.selectedChatbotLogo && (
-                  <img
+                  <Image
                     src={w.selectedChatbotLogo}
                     alt="Chatbot"
+                    width={48}
+                    height={48}
                     className={`${w.logoShape || ''} ${w.style5LogoSize || ''} border-2 cursor-pointer`}
                     onClick={() => setActiveView('chat')}
                     style={w.style5BotIconColor ? { borderColor: w.style5BotIconColor } : {}}
@@ -499,9 +501,11 @@ export default function RenderUiDesign({ designId, onFetchedContent }: RenderUiD
             {w.selectedStyle === "Style 3" && (
               <>
                 {w.selectedChatbotLogo && (
-                  <img
+                  <Image
                     src={w.selectedChatbotLogo}
                     alt="Chatbot"
+                    width={48}
+                    height={48}
                     className={`${w.logoShape || ''} ${w.style5LogoSize || ''} border-2 cursor-pointer`}
                     onClick={() => setActiveView('chat')}
                     style={w.style5BotIconColor ? { borderColor: w.style5BotIconColor } : {}}
@@ -595,9 +599,11 @@ export default function RenderUiDesign({ designId, onFetchedContent }: RenderUiD
                     )}
                     {/* Voicebot logo right */}
                     {w.selectedVoiceBotLogo && (
-                      <img
+                      <Image
                         src={w.selectedVoiceBotLogo}
                         alt="Voicebot"
+                        width={48}
+                        height={48}
                         className={`${w.logoShape || ''} ${w.style5LogoSize || ''} border-2 cursor-pointer`}
                         onClick={e => {
                           e.stopPropagation();
@@ -616,9 +622,11 @@ export default function RenderUiDesign({ designId, onFetchedContent }: RenderUiD
                   <>
                     {/* Chatbot logo/icon: open chat UI */}
                     {w.selectedChatbotLogo && (
-                      <img
+                      <Image
                         src={w.selectedChatbotLogo}
                         alt="Chatbot"
+                        width={48}
+                        height={48}
                         className={`${w.logoShape || ''} ${w.style5LogoSize || ''} border-2 cursor-pointer`}
                         onClick={() => setActiveView('chat')}
                       />
