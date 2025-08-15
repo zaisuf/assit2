@@ -282,7 +282,7 @@ const Pricing: React.FC = () => {
             <h2 className="text-3xl font-orbitron text-center mb-8">Frequently Asked Questions</h2>
             <div className="space-y-6">
               <div className="border border-[#BAFFF5]/20 rounded-xl p-6 hover:border-[#BAFFF5]/40 transition-all">
-                <h3 className="text-xl font-poppins mb-2">What's included in the API calls?</h3>
+                <h3 className="text-xl font-poppins mb-2">What&apos;s included in the API calls?</h3>
                 <p className="text-gray-300 font-space">
                   Each API call includes both speech-to-text and text-to-speech conversion, along with AI processing.
                 </p>
