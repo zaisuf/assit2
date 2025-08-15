@@ -399,7 +399,7 @@ const AGSidebar: React.FC<AGSidebarProps & { hideOverlays?: boolean; closeVoiceS
           {/* Style overlay content */}
           {overlay === 'Style' && (
             <div className="mt-4 w-full max-h-[480px] overflow-y-auto pr-2 custom-scrollbar no-scrollbar">
-/* Add this CSS to hide the scrollbar */
+{/* Add this CSS to hide the scrollbar */}
 <style jsx global>{`
   .no-scrollbar::-webkit-scrollbar {
     display: none;
@@ -538,7 +538,7 @@ const AGSidebar: React.FC<AGSidebarProps & { hideOverlays?: boolean; closeVoiceS
                             title={shape}
                             onClick={() => setLogoShape && setLogoShape(shape)}
                           >
-                            <img src="/chatbot1.jpg" alt="Logo" className={`w-6 h-6 ${shape}`} />
+                            <Image src="/chatbot1.jpg" alt="Logo" width={24} height={24} className={`w-6 h-6 ${shape}`} />
                           </button>
                         ))}
                       </div>
