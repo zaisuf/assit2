@@ -1,3 +1,4 @@
+import Image from "next/image";
 "use client";
 
 import TTSOverlay from "./tts-overlay";
@@ -455,7 +456,7 @@ export default function EditPartnerPage() {
                   </div>
                   <div className="flex items-center w-full mb-2">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e5e7eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 -mt-10"><path d="M12 3v18"/><path d="M5 12h14"/></svg>
-                    <span className="text-white text-xs opacity-80 mt-0">Automatically detect the user's language for the chatbot agent.</span>
+                    <span className="text-white text-xs opacity-80 mt-0">Automatically detect the user&apos;s language for the chatbot agent.</span>
                     <label className="relative inline-flex items-center cursor-pointer group ml-4">
                       <input type="checkbox" className="sr-only peer" checked={autoDetectLanguageEnabled} onChange={e => setAutoDetectLanguageEnabled(e.target.checked)} />
                       <div className="w-9 h-5 bg-black peer-checked:bg-gradient-to-r peer-checked:from-green-500 peer-checked:to-green-400 rounded-full shadow-inner border-2 border-blue-300 group-hover:from-blue-600 group-hover:to-blue-800 transition-all duration-300 peer-checked:border-green-300 flex items-center justify-center"></div>
@@ -505,7 +506,7 @@ export default function EditPartnerPage() {
                   </div>
                   {/* Image below tagline */}
                   <div className="w-full flex justify-center mt-2 mb-2">
-                    <img src="/54tr3.png" alt="Redirect Illustration" style={{maxWidth: '120px', maxHeight: '60px', objectFit: 'contain'}} />
+                    <Image src="/54tr3.png" alt="Redirect Illustration" width={120} height={60} style={{maxWidth: '120px', maxHeight: '60px', objectFit: 'contain'}} />
                   </div>
                 </div>
                 {/* Suggestion Prompt Box (right next to Redirect3) */}
