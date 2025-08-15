@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 interface BotOverlayTableProps {
   onSelectModal?: (modalName: string) => void;
@@ -102,20 +103,22 @@ export default function BotOverlayTable({ onSelectModal, onClose }: BotOverlayTa
                   {modal.name}
                 </td>
                 <td className="py-2 px-3 text-left flex items-center gap-2">
-                  <img
-                    src={
-                      modal.platform === 'Alibaba Cloud' ? '/modal logo/qwen.png'
-                      : modal.platform === 'DeepSeek' ? '/modal logo/deepseek.png'
-                      : modal.platform === 'Anthropic' ? '/modal logo/anthropic.png'
-                      : modal.platform === 'Meta' ? '/modal logo/meta.png'
-                      : modal.platform === 'Google' ? '/modal logo/google.png'
-                      : modal.platform === 'Groq' ? '/modal logo/open ai.png'
-                      : modal.platform === 'IBM' ? '/modal logo/IBM.png'
-                      : modal.platform === 'Mistral AI' ? '/modal logo/Mistral.png'
-                      : modal.platform === 'Moonshot AI' ? '/modal logo/Moonshot.png'
-                      : '/favicon.ico'
-                    }
+                  <Image
+                    src={(() => {
+                      if (modal.platform === 'Alibaba Cloud') return '/modal logo/qwen.png';
+                      if (modal.platform === 'DeepSeek') return '/modal logo/deepseek.png';
+                      if (modal.platform === 'Anthropic') return '/modal logo/anthropic.png';
+                      if (modal.platform === 'Meta') return '/modal logo/meta.png';
+                      if (modal.platform === 'Google') return '/modal logo/google.png';
+                      if (modal.platform === 'Groq') return '/modal logo/open ai.png';
+                      if (modal.platform === 'IBM') return '/modal logo/IBM.png';
+                      if (modal.platform === 'Mistral AI') return '/modal logo/Mistral.png';
+                      if (modal.platform === 'Moonshot AI') return '/modal logo/Moonshot.png';
+                      return '/favicon.ico';
+                    })()}
                     alt={modal.platform + ' logo'}
+                    width={24}
+                    height={24}
                     className="w-6 h-6 object-contain"
                   />
                   {modal.platform}
@@ -153,21 +156,24 @@ export default function BotOverlayTable({ onSelectModal, onClose }: BotOverlayTa
           <div className="font-bold mb-2 text-xl text-blue-300" style={{fontFamily: 'sans-serif'}}>Pricing</div>
           <div className="mb-1 text-sm" style={{color: '#60a5fa', fontFamily: 'sans-serif', fontWeight: 600}}>
             <span style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
-              <img
-                src={
-                  botModals[hoveredIdx].platform === 'Alibaba Cloud' ? '/modal logo/qwen.png'
-                  : botModals[hoveredIdx].platform === 'DeepSeek' ? '/modal logo/deepseek.png'
-                  : botModals[hoveredIdx].platform === 'Anthropic' ? '/modal logo/claude ai.png'
-                  : botModals[hoveredIdx].platform === 'Meta' ? '/_io/meta.png'
-                  : botModals[hoveredIdx].platform === 'Google' ? '/modal logo/google.png'
-                  : botModals[hoveredIdx].platform === 'Groq' ? '/modal logo/open ai.png'
-                  : botModals[hoveredIdx].platform === 'IBM' ? '/modal logo/IBM.png'
-                  : botModals[hoveredIdx].platform === 'Mistral AI' ? '/modal logo/Mistral.png'
-                  : botModals[hoveredIdx].platform === 'Moonshot AI' ? '/modal logo/Moonshot.png'
-                  : '/favicon.ico'
-                }
+              <Image
+                src={(() => {
+                  const platform = botModals[hoveredIdx].platform;
+                  if (platform === 'Alibaba Cloud') return '/modal logo/qwen.png';
+                  if (platform === 'DeepSeek') return '/modal logo/deepseek.png';
+                  if (platform === 'Anthropic') return '/modal logo/claude ai.png';
+                  if (platform === 'Meta') return '/modal logo/meta.png';
+                  if (platform === 'Google') return '/modal logo/google.png';
+                  if (platform === 'Groq') return '/modal logo/open ai.png';
+                  if (platform === 'IBM') return '/modal logo/IBM.png';
+                  if (platform === 'Mistral AI') return '/modal logo/Mistral.png';
+                  if (platform === 'Moonshot AI') return '/modal logo/Moonshot.png';
+                  return '/favicon.ico';
+                })()}
                 alt={botModals[hoveredIdx].platform + ' logo'}
-                style={{width: '20px', height: '20px', objectFit: 'contain'}}
+                width={20}
+                height={20}
+                style={{objectFit: 'contain'}}
               />
               {botModals[hoveredIdx].name}
             </span>
