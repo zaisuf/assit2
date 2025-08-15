@@ -1,5 +1,6 @@
 
 import React, { useState } from "react";
+import Image from 'next/image';
 
 interface VoiceBotBoxProps {
   disconnectBtnTextColor?: string;
@@ -107,12 +108,14 @@ const VoiceBotBox: React.FC<VoiceBotBoxProps> = ({ sizeClass, shapeClass, custom
         <div className="flex-1 flex flex-col items-center justify-center p-0">
           <div className="relative w-[60px] h-[60px] rounded-full overflow-hidden shadow -mt-10">
             {normalizedSrc && normalizedSrc.endsWith('.gif') ? (
-              <img
+              <Image
                 src={normalizedSrc}
-                className="absolute top-1/2 left-1/2 w-[82px] h-[82px] object-cover"
+                width={82}
+                height={82}
+                className="absolute top-1/2 left-1/2 object-cover"
                 style={{ transform: 'translate(-50%, -50%)', background: 'transparent' }}
                 alt="Voice Bot GIF"
-                onError={e => { e.currentTarget.src = '/bubble3.mp4'; }}
+                onError={() => {}}
               />
             ) : (
               <video
@@ -295,12 +298,14 @@ export const VoiceBotBox1: React.FC<VoiceBotBox1Props> = ({ sizeClass, shapeClas
           {/* Centered video/gif animation, moved up by reducing top padding */}
           <div className="relative w-[48px] h-[48px] rounded-full overflow-hidden shadow mt-1" title="Restore Voice Bot Box">
             {normalizedSrc && normalizedSrc.endsWith('.gif') ? (
-              <img
+              <Image
                 src={normalizedSrc}
-                className="absolute top-1/2 left-1/2 w-[60px] h-[62px] object-cover"
+                width={60}
+                height={62}
+                className="absolute top-1/2 left-1/2 object-cover"
                 style={{ transform: 'translate(-50%, -50%)', background: 'transparent', pointerEvents: 'none' }}
                 alt="Voice Bot GIF"
-                onError={e => { e.currentTarget.src = '/bubble3.mp4'; }}
+                onError={() => {}}
               />
             ) : (
               <video
