@@ -1,0 +1,12 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "Test STT endpoint with sample audio",
+			"command": "Invoke-RestMethod -Uri 'http://127.0.0.1:8000/api/stt' -Method POST -Headers @{Authorization = 'Bearer sk_1234567890abcdef'} -Form @{file = Get-Item 'output.wav'}",
+			"group": "test",
+			"isBackground": false
+		}
+	]
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Voice Conversation</title>
+</head>
+<body>
+  <h2>🎤 Talk to AI</h2>
+  <button onclick="startConversation()">Start Talking</button>
+  <p id="transcript">Waiting for input...</p>
+
+  <script>
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    const transcriptEl = document.getElementById("transcript");
+
+    recognition.onstart = () => {
+      transcriptEl.innerText = "Listening...";
+    };
+
+    recognition.onresult = (event) => {
+      const text = event.results[0][0].transcript;
+      transcriptEl.innerText = "You said: " + text;
+
+      // 🧠 Simple AI logic (You can connect with GPT API here)
+      let reply = "";
+
+      if (text.toLowerCase().includes("hello")) {
+        reply = "Hello! How can I help you today?";
+      } else if (text.toLowerCase().includes("your name")) {
+        reply = "I am your AI assistant.";
+      } else {
+        reply = "Sorry, I didn't understand. Please try again.";
+      }
+
+      speak(reply);
+    };
+
+    function speak(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      speechSynthesis.speak(utterance);
+    }
+
+    function startConversation() {
+      recognition.start();
+    }
+  </script>
+</body>
+</html>

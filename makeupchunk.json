@@ -1,0 +1,277 @@
+[
+  {
+    "id": "out-of-scope-other-websites",
+    "intent": "other_websites_related",
+    "text": "I cannot assist with queries about other websites, platforms, or online beauty services. I'm a beauty assistant exclusively for Hasutara, focused on helping you with our makeup products and services. Would you like to explore our beauty collection instead?"
+  },
+  {
+    "id": "out-of-scope-human",
+    "intent": "human_related",
+    "text": "I cannot provide personal medical advice, dermatological diagnoses, or answer questions about health conditions. I'm a beauty assistant focused on helping you with makeup and beauty products. For medical concerns, please consult healthcare professionals. Would you like help finding suitable makeup products instead?"
+  },
+  {
+    "id": "out-of-scope-ai-ml",
+    "intent": "ai_ml_llm_related",
+    "text": "I don't provide AI/ML services or technical assistance. I'm a beauty assistant focused on helping you with makeup and beauty products. For AI/ML related questions, please consult technical resources. Can I help you find some beauty products instead?"
+  },
+  {
+    "id": "chatbot-name",
+    "intent": "chatbot_info",
+    "text": "Hello! I'm Hena, your virtual beauty assistant at Hasutara. How can I help you with your makeup and beauty needs today?"
+  },
+  {
+    "id": "product-foundation-matte",
+    "intent": "product_details",
+    "text": "Matte Perfection Foundation: Long-wearing liquid foundation with full coverage. Oil-free formula suitable for all skin types. Available in 24 shades. Price: ₹1,999."
+  },
+  {
+    "id": "product-foundation-dewy",
+    "intent": "product_details",
+    "text": "Dewy Glow Foundation: Hydrating foundation with medium coverage and radiant finish. Enriched with hyaluronic acid. Available in 20 shades. Price: ₹2,199."
+  },
+  {
+    "id": "product-concealer",
+    "intent": "product_details",
+    "text": "Full Coverage Concealer: Creamy concealer that covers dark circles and imperfections. Available in 15 shades. Price: ₹999."
+  },
+  {
+    "id": "product-eyeshadow-palette",
+    "intent": "product_details",
+    "text": "Sunset Dreams Eyeshadow Palette: 12 highly pigmented shades in matte and shimmer finishes. Mix of warm neutrals and bold colors. Price: ₹2,499."
+  },
+  {
+    "id": "product-mascara",
+    "intent": "product_details",
+    "text": "Volume Boost Mascara: Lengthening and volumizing mascara. Smudge-proof and water-resistant formula. Available in Black and Brown. Price: ₹899."
+  },
+  {
+    "id": "product-lipstick-matte",
+    "intent": "product_details",
+    "text": "Velvet Matte Lipstick: Long-lasting matte lipstick with comfortable wear. Available in 20 shades. Price: ₹799."
+  },
+  {
+    "id": "product-lipstick-cream",
+    "intent": "product_details",
+    "text": "Creamy Satin Lipstick: Moisturizing lipstick with medium coverage and satin finish. Available in 15 shades. Price: ₹699."
+  },
+  {
+    "id": "product-blush",
+    "intent": "product_details",
+    "text": "Silk Touch Blush: Buildable powder blush for a natural flush. Available in 8 flattering shades. Price: ₹899."
+  },
+  {
+    "id": "product-highlighter",
+    "intent": "product_details",
+    "text": "Glow Essence Highlighter: Finely milled powder highlighter for subtle to intense glow. Available in 4 shades. Price: ₹1,299."
+  },
+  {
+    "id": "product-setting-powder",
+    "intent": "product_details",
+    "text": "Flawless Finish Setting Powder: Lightweight, translucent powder for long-lasting makeup. Available in 3 tints. Price: ₹1,499."
+  },
+  {
+    "id": "product-primer",
+    "intent": "product_details",
+    "text": "Smooth Canvas Primer: Pore-minimizing face primer for smooth makeup application. Suitable for all skin types. Price: ₹1,299."
+  },
+  {
+    "id": "product-makeup-brushes",
+    "intent": "product_details",
+    "text": "Pro Artist Brush Set: 12-piece professional makeup brush set with synthetic bristles. Includes face and eye brushes. Price: ₹2,999."
+  },
+  {
+    "id": "product-makeup-sponge",
+    "intent": "product_details",
+    "text": "Perfect Blend Beauty Sponge: Latex-free makeup sponge for flawless application. Available in Pink and Black. Price: ₹499."
+  },
+  {
+    "id": "service-makeup-consultation",
+    "intent": "service_details",
+    "text": "Virtual Makeup Consultation: 30-minute personalized session with our beauty expert. Get product recommendations and application tips. Price: ₹999."
+  },
+  {
+    "id": "service-bridal-makeup",
+    "intent": "service_details",
+    "text": "Bridal Makeup Package: Complete bridal makeup service including trial session. Includes premium products and false lashes. Starting at ₹15,000."
+  },
+  {
+    "id": "service-party-makeup",
+    "intent": "service_details",
+    "text": "Party Makeup Service: Professional makeup application for special occasions. Includes skin prep and setting spray. Starting at ₹3,999."
+  },
+  {
+    "id": "shipping-policy",
+    "intent": "shipping_details",
+    "text": "Free shipping on orders over ₹999. Products carefully packed to prevent damage. Standard delivery takes 3-5 business days within India. Express shipping available."
+  },
+  {
+    "id": "return-policy",
+    "intent": "return_details",
+    "text": "30-day return policy for unopened products in original packaging. Hygiene-sealed items cannot be returned once opened. Free returns within India."
+  },
+  {
+    "id": "product-care",
+    "intent": "care_instructions",
+    "text": "Store makeup products in a cool, dry place. Check PAO (Period After Opening) symbol. Clean brushes regularly. Keep products tightly closed when not in use."
+  },
+  {
+    "id": "hygiene-policy",
+    "intent": "hygiene_info",
+    "text": "All products are authenticity-certified and hygienically sealed. Testers available in stores only. Do not share personal makeup items."
+  },
+  {
+    "id": "skin-guide",
+    "intent": "skin_type_guide",
+    "text": "We recommend patch testing new products. Our beauty experts can help determine your skin type and suitable products. Foundation samples available for shade matching."
+  },
+  {
+    "id": "loyalty-program",
+    "intent": "loyalty_rewards",
+    "text": "Join Beauty Rewards - earn points on every purchase. 100 points = ₹100. Get early access to launches and exclusive beauty workshops."
+  },
+  {
+    "id": "gift-cards",
+    "intent": "gift_card_info",
+    "text": "Digital beauty gift cards from ₹500 to ₹10,000. Perfect for makeup lovers. Valid for both products and services. Instant email delivery."
+  },
+  {
+    "id": "product-authenticity",
+    "intent": "authenticity_guarantee",
+    "text": "100% authentic products sourced directly from manufacturers. Each product carries a unique authenticity code. Beware of counterfeit products."
+  },
+  {
+    "id": "store-locator",
+    "intent": "offline_stores",
+    "text": "Visit our beauty stores for personalized service. Makeup testing and shade matching available. Book appointments for beauty services."
+  },
+  {
+    "id": "fallback-general",
+    "intent": "fallback_general",
+    "text": "I'm your Hasutara Beauty Assistant. I can help with product recommendations, shade matching, makeup tips, or booking beauty services. What would you like to know?"
+  },
+  {
+    "id": "fallback-specific",
+    "intent": "fallback_specific",
+    "text": "To help you better, could you be more specific? Are you looking for: 1) Specific makeup products 2) Shade matching help 3) Beauty services 4) Application tips 5) Product recommendations?"
+  },
+  {
+    "id": "fallback-redirect",
+    "intent": "fallback_redirect",
+    "text": "Let me help you find what you need: 1) Browse our makeup collection 2) Get personalized recommendations 3) Book beauty services 4) Learn application techniques 5) Check our current offers."
+  },
+  {
+    "id": "product-eyeliner-liquid",
+    "intent": "product_details",
+    "text": "Precision Liquid Eyeliner: Ultra-fine tip for precise application. Waterproof formula lasts up to 24 hours. Available in Deep Black and Brown. Price: ₹799."
+  },
+  {
+    "id": "product-eyeliner-pencil",
+    "intent": "product_details",
+    "text": "Smooth Glide Eye Pencil: Creamy texture with smudge-proof wear. Available in 8 shades including metallics. Price: ₹599."
+  },
+  {
+    "id": "product-brow-pencil",
+    "intent": "product_details",
+    "text": "Precision Brow Sculptor: Dual-ended with spoolie brush. Available in 6 natural shades. Waterproof formula. Price: ₹899."
+  },
+  {
+    "id": "product-brow-gel",
+    "intent": "product_details",
+    "text": "Brow Setting Gel: Clear or tinted gel for all-day hold. Buildable color and natural finish. Available in 4 shades. Price: ₹699."
+  },
+  {
+    "id": "product-lip-liner",
+    "intent": "product_details",
+    "text": "Long-Wear Lip Liner: Creamy, non-drying formula. Prevents lipstick bleeding. Available in 12 shades. Price: ₹599."
+  },
+  {
+    "id": "product-lip-gloss",
+    "intent": "product_details",
+    "text": "High Shine Lip Gloss: Non-sticky formula with vitamin E. Available in 10 shades from clear to pigmented. Price: ₹699."
+  },
+  {
+    "id": "product-contour-palette",
+    "intent": "product_details",
+    "text": "Sculpt & Glow Contour Kit: 4 buildable shades for contouring and highlighting. Includes application guide. Price: ₹1,999."
+  },
+  {
+    "id": "product-bronzer",
+    "intent": "product_details",
+    "text": "Sun-Kissed Bronzer: Buildable powder bronzer for natural warmth. Available in 4 shades. Price: ₹1,299."
+  },
+  {
+    "id": "product-setting-spray",
+    "intent": "product_details",
+    "text": "All-Day Setting Spray: Locks makeup in place for 16+ hours. Available in Matte and Dewy finish. Price: ₹999."
+  },
+  {
+    "id": "product-makeup-remover",
+    "intent": "product_details",
+    "text": "Gentle Makeup Remover: Oil-free formula safe for sensitive eyes. Removes waterproof makeup. 200ml bottle. Price: ₹599."
+  },
+  {
+    "id": "service-group-makeup",
+    "intent": "service_details",
+    "text": "Group Makeup Workshop: 2-hour hands-on session for 4-6 people. Learn essential techniques and tips. Starting at ₹1,999 per person."
+  },
+  {
+    "id": "service-makeup-trial",
+    "intent": "service_details",
+    "text": "Bridal Makeup Trial: 90-minute session to perfect your wedding look. Includes shade matching and photos. Price: ₹2,999."
+  },
+  {
+    "id": "collection-bridal",
+    "intent": "collection_details",
+    "text": "Bridal Beauty Collection: Curated set of long-wearing products for your special day. Includes touch-up kit. Price: ₹9,999."
+  },
+  {
+    "id": "collection-starter",
+    "intent": "collection_details",
+    "text": "Beginner's Essential Kit: Perfect starter set with everyday basics. Includes tutorial guide. Price: ₹3,999."
+  },
+  {
+    "id": "collection-pro",
+    "intent": "collection_details",
+    "text": "Professional Makeup Kit: Comprehensive set of products for makeup artists. Includes pro brush set. Price: ₹24,999."
+  },
+  {
+    "id": "seasonal-summer",
+    "intent": "seasonal_collection",
+    "text": "Summer Glow Collection: Lightweight, sweat-proof products perfect for summer. SPF-infused formulas. Limited edition."
+  },
+  {
+    "id": "seasonal-festive",
+    "intent": "seasonal_collection",
+    "text": "Festive Glam Collection: Bold, metallic finishes for special occasions. Includes gift packaging. Limited edition."
+  },
+  {
+    "id": "membership-pro",
+    "intent": "membership_details",
+    "text": "Pro Makeup Artist Membership: Special pricing, early access to launches, free workshops. Annual fee: ₹4,999."
+  },
+  {
+    "id": "brush-care",
+    "intent": "care_instructions",
+    "text": "Brush Care Guide: Weekly cleaning recommended. Use gentle soap, reshape, and air dry flat. Deep cleaning service available in-store."
+  },
+  {
+    "id": "shade-matching",
+    "intent": "service_details",
+    "text": "Virtual Shade Matching: Use our AR tool to find your perfect foundation match. Free consultation with beauty expert available."
+  },
+  {
+    "id": "makeup-course-basic",
+    "intent": "course_details",
+    "text": "Basic Makeup Course: 4-week program covering everyday makeup techniques. Includes starter kit. Price: ₹12,999."
+  },
+  {
+    "id": "makeup-course-advanced",
+    "intent": "course_details",
+    "text": "Advanced Makeup Course: 8-week professional course. Includes certification and pro kit. Price: ₹49,999."
+  },
+  {
+    "id": "product-application-tips",
+    "intent": "tutorial_info",
+    "text": "Access our video tutorials and step-by-step guides for each product. Live demonstration sessions available weekly."
+  }
+]

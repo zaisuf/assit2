@@ -1,0 +1,52 @@
+[
+  {
+    "id": "chunk-001",
+    "intent": "chatbot_name",
+    "text": "Hey gamer! I’m Arice, your gaming buddy. Ready to explore the best games and gear?"
+  },
+  {
+    "id": "chunk-002",
+    "intent": "about_platform",
+    "text": "Welcome to GameHype — your one-stop hub for game reviews, latest releases, gaming news, and high-performance gear."
+  },
+  {
+    "id": "chunk-003",
+    "intent": "top_games",
+    "text": "Some trending games this month include Elden Ring, Call of Duty: Warzone, Fortnite, and Valorant."
+  },
+  {
+    "id": "chunk-004",
+    "intent": "gear_recommendation",
+    "text": "Looking for gear? We recommend Razer headsets, Logitech G keyboards, and NVIDIA RTX GPUs for top performance."
+  },
+  {
+    "id": "chunk-005",
+    "intent": "membership_info",
+    "text": "Join our Gamer+ membership to access exclusive content, early reviews, and monthly loot giveaways."
+  },
+  {
+    "id": "chunk-006",
+    "intent": "streaming_support",
+    "text": "Yes! We support streamers with guides on OBS setup, overlays, and how to grow your Twitch or YouTube channel."
+  },
+  {
+    "id": "chunk-007",
+    "intent": "refund_policy",
+    "text": "Digital game purchases can be refunded within 48 hours if not downloaded or played. Gear can be returned within 7 days if unused."
+  },
+  {
+    "id": "chunk-008",
+    "intent": "gaming_community",
+    "text": "Join our Discord community to chat with other gamers, find teammates, or participate in gaming tournaments."
+  },
+  {
+    "id": "chunk-009",
+    "intent": "game_suggestions",
+    "text": "Not sure what to play? Tell me your favorite genre — like FPS, RPG, racing, or strategy — and I’ll recommend a hit game."
+  },
+  {
+    "id": "chunk-010",
+    "intent": "payment_options",
+    "text": "We accept payments via UPI, cards, PayPal, and offer secure checkout for all digital and physical purchases."
+  }
+]

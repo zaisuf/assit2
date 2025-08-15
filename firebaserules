@@ -1,0 +1,81 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow public read/write for test-user-id uidesing/wedgetui for testing
+    match /users/test-user-id/uidesing/wedgetui/{uiid} {
+      allow read, write: if true;
+    }
+    // Optionally allow at the uidesing level for other docs
+    match /users/test-user-id/uidesing/{document} {
+      allow read, write: if true;
+    }
+
+    // Allow public read for the knowledge doc for testing
+    match /users/uKm7TeDlqgdG2GAhAlehc18cQBb2/jsonFiles/data {
+      allow read: if true;
+    }
+
+    // Existing user rules
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+
+      match /uidesing/{uidesingId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // Allow authenticated users to read/write their own UI subcollection
+      match /ui/{uiId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      match /yourkay/{document} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      match /yamlFiles/{document} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+        allow create, update: if request.resource.data.data != null
+                            && request.resource.data.filename is string
+                            && request.resource.data.timestamp is string;
+      }
+
+
+      match /jsonFiles/{document} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // Allow authenticated users to read/write their own allPages collection
+      match /allPages/{document} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      match /agent/{partnerId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      match /agent/chatbotUI {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // TEMPORARY: Allow all reads and writes for debugging
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /users/{userId}/jsonFiles/{allPaths=**} {
+      allow read, write: if true;  // Temporarily allowing all access for testing
+    }
+
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}
