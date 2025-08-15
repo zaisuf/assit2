@@ -133,9 +133,11 @@ const Wedget: React.FC<WedgetProps> = (props) => {
           <div className="flex items-center w-full gap-2">
             {styles[inputBarStyle]}
             {voiceBotLogo && (
-              <img
+              <Image
                 src={voiceBotLogo}
                 alt="Voice Agent"
+                width={32}
+                height={32}
                 className={`${style5LogoSize || "w-8 h-8"} ${logoShape} border-2 border-emerald-400 cursor-pointer`}
                 onClick={onOpenVoiceBotBox}
               />
@@ -192,9 +194,11 @@ const Wedget: React.FC<WedgetProps> = (props) => {
               {micIcon}
               Voice chat
             </button>
-            <img
+            <Image
               src={chatbotLogo || "/chatbot1.jpg"}
               alt="Chatbot"
+              width={32}
+              height={32}
               className={`${iconSize} ${logoShape} cursor-pointer border border-white/30 object-contain`}
               onClick={onLogoClick}
               style={{ cursor: 'pointer', aspectRatio: '0.7/1' }}
@@ -242,9 +246,11 @@ const Wedget: React.FC<WedgetProps> = (props) => {
           : micIconRenderers['default'](micColor, "w-8 h-8");
         return (
           <div className="flex items-center w-full justify-between gap-2">
-            <img
+            <Image
               src={chatbotLogo || "/chatbot1.jpg"}
               alt="Chatbot"
+              width={32}
+              height={32}
               className={`${iconSize} ${logoShape} cursor-pointer`}
               onClick={onLogoClick}
               style={{ cursor: 'pointer' }}
@@ -265,18 +271,22 @@ const Wedget: React.FC<WedgetProps> = (props) => {
         let iconSize = style5LogoSize || "w-8 h-8";
         return (
           <div className="flex items-center w-full justify-center gap-4">
-            <img
+            <Image
               src={chatbotLogo || "/chatbot1.jpg"}
               alt="Chatbot Logo"
+              width={32}
+              height={32}
               className={`${iconSize} ${logoShape} cursor-pointer border border-white/30 object-contain`}
               onClick={onLogoClick}
               style={{ cursor: 'pointer', aspectRatio: '0.7/1' }}
             />
-            <img
+            <Image
               src={voiceBotLogo || "/voicechat1.jpg"}
               alt="Voice Chat Logo"
+              width={32}
+              height={32}
               className={`${iconSize} ${logoShape}`}
-               style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer' }}
               onClick={onLogoClick}
             />
           </div>
