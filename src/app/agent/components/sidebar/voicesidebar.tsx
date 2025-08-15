@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Image from 'next/image';
 import { FaEdit } from "react-icons/fa";
 
 
@@ -109,9 +110,11 @@ const AGSidebar: React.FC<AGSidebarProps> = ({
                         onClick={() => setSelectedWaveformVideo(src)}
                       >
                         {isGif ? (
-                          <img
+                          <Image
                             src={src.startsWith('/') ? src : '/' + src}
-                            className="w-[60px] h-[60px] object-cover rounded-full shadow"
+                            width={60}
+                            height={60}
+                            className="object-cover rounded-full shadow"
                             alt={`Waveform GIF ${idx + 1}`}
                             style={{ background: 'transparent' }}
                           />
@@ -163,10 +166,12 @@ const AGSidebar: React.FC<AGSidebarProps> = ({
                       className="flex items-center justify-center focus:outline-none"
                       style={{ borderRadius: '50%', padding: 0, background: 'none', border: 'none' }}
                     >
-                      <img
+                      <Image
                         src={imgSrc}
+                        width={60}
+                        height={60}
                         alt={`Agent Logo ${idx + 1}`}
-                        className="w-[60px] h-[60px] object-cover rounded-full shadow border border-white/20 bg-black"
+                        className="object-cover rounded-full shadow border border-white/20 bg-black"
                         style={{ background: '#111' }}
                       />
                     </button>
