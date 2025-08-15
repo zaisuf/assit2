@@ -32,7 +32,7 @@ const AIFeaturesSection = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   // Helper to recalculate polyline points
-  const recalcPolylines = () => {
+  const recalcPolylines = React.useCallback(() => {
     const wrapper = wrapperRef.current?.getBoundingClientRect();
     const chatBox = chatBoxRef.current?.getBoundingClientRect();
     const voiceBox = voiceBoxRef.current?.getBoundingClientRect();
@@ -53,7 +53,7 @@ const AIFeaturesSection = () => {
     const chatToButton = `${chatX},${chatY} ${chatX+40},${chatY} ${chatX+40},${btnCenterY} ${btnLeftX},${btnCenterY}`;
     const voiceToButton = `${voiceX},${voiceY} ${voiceX-40},${voiceY} ${voiceX-40},${btnCenterY} ${btnRightX},${btnCenterY}`;
     setPolylinePoints({ chatToButton, voiceToButton });
-  };
+  }, [selectedIndex]);
 
   useLayoutEffect(() => {
     // Delay to ensure refs are set after DOM paint
@@ -63,7 +63,7 @@ const AIFeaturesSection = () => {
       clearTimeout(timeout);
       window.removeEventListener('resize', recalcPolylines);
     };
-  }, [selectedIndex, buttonLabels.length]);
+  }, [selectedIndex, buttonLabels.length, recalcPolylines]);
 
   // Use MutationObserver to recalc on DOM/layout changes
   useEffect(() => {
@@ -74,7 +74,7 @@ const AIFeaturesSection = () => {
     });
     observer.observe(container, { childList: true, subtree: true, attributes: true });
     return () => observer.disconnect();
-  }, [selectedIndex, buttonLabels.length]);
+  }, [selectedIndex, buttonLabels.length, recalcPolylines]);
 
   return (    
     <div ref={wrapperRef} className="relative min-h-screen w-full overflow-hidden bg-transparent font-sans">
@@ -318,7 +318,7 @@ const AIFeaturesSection = () => {
               className="px-3 py-1.5 bg-gradient-to-r from-[#7C3AED] to-[#DB2777] text-white font-semibold text-xs shadow-md transition-all duration-300 z-10 font-sans"
               style={{fontFamily: 'sans-serif'}}
             >
-              <span>Let's Talk</span>
+              <span>Let&apos;s Talk</span>
             </motion.button>
           </div>
 
