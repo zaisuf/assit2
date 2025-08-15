@@ -111,9 +111,10 @@ const AIFeaturesSection2 = () => {
           initial={{ opacity: 0, x: 120 }}
           animate={isInView ? { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 80, delay: 0.1 } } : {}}
         >
-          <img
+          <Image
             src="/text inputchatbto/WhatsApp I-.jpg"
             alt="Background"
+            fill
             className="absolute inset-0 w-full h-full object-cover opacity-70 z-0 brightness-90 scale-90 -translate-x-10"
           />
           <div className="relative z-8 flex items-center gap-4 w-full h-full">
@@ -293,7 +294,7 @@ const AIFeaturesSection2 = () => {
                     style={{ marginLeft: hovered && activeIndex === 2 ? '-40px' : '-200px', transition: 'margin-left 0.3s' }}>
                     <span className="mr-1 flex items-center justify-center w-5 h-5 rounded-full bg-gradient-to-br from-sky-400 to-sky-600 text-[10px] font-bold text-white border border-sky-400 shadow">AI</span>
                     <span className="font-sans text-[#e0e0e0] text-xs md:text-sm font-semibold select-text leading-tight text-left rounded-lg p-1 shadow-md bg-gradient-to-br from-gray-700/40 to-gray-900/50 backdrop-blur-md border border-gray-700/30">
-                      You're now on the Appointment Help page. To book a video consultation, choose a doctor, pick a time, and click 'Confirm
+                      You&apos;re now on the Appointment Help page. To book a video consultation, choose a doctor, pick a time, and click &apos;Confirm
                     </span>
                   </div>
                 </div>
@@ -308,7 +309,7 @@ const AIFeaturesSection2 = () => {
             animate={isInView ? { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 80, delay: 0.1 } } : {}}
           >
             {/* Background image for box 3, only changes on card hover, not box 2 hover */}
-            <img
+            <Image
               src={
                 activeIndex === 0 ? "/modernhoues_creative Large.jpeg" :
                 activeIndex === 1 ? "/modern_houes_japanees.jpeg" :
@@ -317,6 +318,7 @@ const AIFeaturesSection2 = () => {
                 "/Assistlore_arabic.jpeg"
               }
               alt="Box 3 Background"
+              fill
               className="absolute inset-0 w-full h-full object-cover opacity-60 z-0 transition-all duration-300"
               draggable="false"
             />
@@ -342,9 +344,11 @@ const AIFeaturesSection2 = () => {
                 onMouseEnter={() => setActiveIndex(0)}
                 onMouseLeave={() => setActiveIndex(null)}
               >
-                <img
+                <Image
                   src="/modernhoues_creative Large.jpeg"
                   alt="Card 1"
+                  width={128}
+                  height={176}
                   className="w-full h-full object-cover"
                 />
               </motion.div>
@@ -357,9 +361,11 @@ const AIFeaturesSection2 = () => {
                 onMouseEnter={() => setActiveIndex(1)}
                 onMouseLeave={() => setActiveIndex(null)}
               >
-                <img
+                <Image
                   src="/modern_houes_japanees.jpeg"
                   alt="Card 2"
+                  width={128}
+                  height={176}
                   className="w-full h-full object-cover"
                 />
               </motion.div>
@@ -372,9 +378,11 @@ const AIFeaturesSection2 = () => {
                 onMouseEnter={() => setActiveIndex(2)}
                 onMouseLeave={() => setActiveIndex(null)}
               >
-                <img
+                <Image
                   src="/Assistlore_bedroom_style.jpeg"
                   alt="Card 3"
+                  width={128}
+                  height={176}
                   className="w-full h-full object-cover"
                 />
               </motion.div>
@@ -387,9 +395,11 @@ const AIFeaturesSection2 = () => {
                 onMouseEnter={() => setActiveIndex(3)}
                 onMouseLeave={() => setActiveIndex(null)}
               >
-                <img
+                <Image
                   src="/Assistlore_new.jpeg"
                   alt="Card 4"
+                  width={128}
+                  height={176}
                   className="w-full h-full object-cover"
                 />
               </motion.div>
