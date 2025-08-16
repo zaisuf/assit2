@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Inter, Poppins, Space_Grotesk, Orbitron } from 'next/font/google'
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from '@/components/theme-provider'
-import CookieConsent from '@/components/CookieConsent'
+import ConditionalCookieConsent from '@/components/ConditionalCookieConsent';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const poppins = Poppins({ 
@@ -29,7 +29,7 @@ const organizationSchema = {
   "image": "https://Assistlore.co/twitter-card.png",
   "description": "Assistlore create a modern look houses with AI ",
   "sameAs": [
-    "https://twitter.com/Assistloree"
+    "https://twitter.com/Assistlore"
   ],
   "contactPoint": {
     "@type": "ContactPoint",
@@ -84,7 +84,7 @@ export default function RootLayout({
           />
           {children}
           <Toaster position="top-center" />
-          <CookieConsent />
+          <ConditionalCookieConsent />
         </ThemeProvider>  
       </body>
     </html>
