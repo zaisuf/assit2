@@ -12,6 +12,7 @@ export function middleware(request: NextRequest) {
         '/', 
         '/price'
     ].includes(path) || 
+    path.startsWith('/UI/') ||           // Allow public access to UI widgets
     path.endsWith('.mp4') || 
     path.startsWith('/_next/') || 
     path.startsWith('/static/') ||
