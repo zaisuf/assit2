@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
   // Get designId and userId from query string
   const { searchParams } = new URL(req.url);
   const designId = searchParams.get('designId');
-  const userId = searchParams.get('userId') || 'test-user-id'; // allow userId to be passed, fallback to test-user-id
+  const userId = 'test-user-id'; // Always use a public ID for widgets
   if (!designId) {
     return NextResponse.json({ error: 'Missing designId' }, { status: 400 });
   }
