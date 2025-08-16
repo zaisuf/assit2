@@ -1,3 +1,4 @@
+import Image from 'next/image';
 "use client";
 
 import React, { useState } from "react";
@@ -291,7 +292,7 @@ function ProductDetails() {
                 <label className="block text-xs text-secondary-cyan mb-1">Product Images</label>
                 <div className="flex flex-wrap gap-2">
                   {images.length > 0 ? images.map((img: string, i: number) => (
-                    <img key={img + i} src={img} alt={"Product image " + (i+1)} className="w-16 h-16 object-cover rounded border border-[#BAFFF5]/20" />
+                    <Image key={img + i} src={img} alt={"Product image " + (i+1)} width={64} height={64} className="w-16 h-16 object-cover rounded border border-[#BAFFF5]/20" />
                   )) : <span className="text-gray-400 text-xs">No images</span>}
                 </div>
               </div>
@@ -558,9 +559,11 @@ function ProductDetails() {
                     <div className="grid grid-cols-2 gap-4">
                       {previewUrls.map((url, index) => (
                         <div key={url} className="relative group">
-                          <img
+                          <Image
                             src={url}
                             alt={`Product preview ${index + 1}`}
+                            width={400}
+                            height={192}
                             className="w-full h-48 object-cover rounded-lg border border-[#BAFFF5]/20"
                           />
                           <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
