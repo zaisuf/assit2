@@ -3,7 +3,7 @@ import Cookies from 'js-cookie'
 export const cookieOptions = {
     secure: process.env.NODE_ENV === 'production',
     expires: 365, // 1 year
-    sameSite: 'strict' as const,
+    sameSite: 'lax' as const,
     path: '/'
 }
 
