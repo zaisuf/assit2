@@ -7,7 +7,7 @@ import Image from 'next/image';
 const SecondVideoSection = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isReversed, setIsReversed] = useState(false);
-  const reverseIntervalRef = useRef<NodeJS.Timeout>();
+  const reverseIntervalRef = useRef<NodeJS.Timeout | null>(null);
   
   const playReverse = () => {
     if (videoRef.current) {
@@ -23,7 +23,9 @@ const SecondVideoSection = () => {
             // If we reached the start, switch to forward playback
             setIsReversed(false);
             videoRef.current.play();
-            clearInterval(reverseIntervalRef.current);
+            if (reverseIntervalRef.current) {
+              clearInterval(reverseIntervalRef.current);
+            }
           } else {
             // Move backwards by small increments
             videoRef.current.currentTime -= 0.1;
