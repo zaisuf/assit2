@@ -109,11 +109,19 @@ export default function Page({ params }: { params: { designId: string } }) {
     }
   };
 
-  return (
+  // Only show background if running in the UI design page (not embedded/merchant)
+  // Prevent background flash by defaulting to false, then enabling after check
+  const [showBg, setShowBg] = useState(false);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // If embedded in iframe, don't show bg
+      setShowBg(window.top === window.self);
+    }
+  }, []);
+
+  const pageContent = (
     <>
       <RenderUiDesign designId={designId} onFetchedContent={setFetchedData} />
-      
-
       {/* Fetched Content Display */}
       {fetchedData && fetchedData.content && (
         <div style={{position:'fixed',top:24,left:24,zIndex:1000,maxWidth:400,maxHeight:300,overflow:'auto',background:'#18181b',color:'#fff',borderRadius:12,padding:16,boxShadow:'0 2px 16px #0008',fontSize:13,whiteSpace:'pre-wrap'}}>
@@ -129,4 +137,13 @@ export default function Page({ params }: { params: { designId: string } }) {
       )}
     </>
   );
+
+  return showBg ? (
+    <div style={{
+      minHeight: '100vh',
+      width: '100vw',
+      background: 'linear-gradient(135deg, #18181b 0%, #2563eb 100%)',
+      position: 'relative',
+    }}>{pageContent}</div>
+  ) : pageContent;
 }
