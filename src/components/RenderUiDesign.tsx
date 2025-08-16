@@ -335,10 +335,19 @@ export default function RenderUiDesign({ designId, onFetchedContent }: RenderUiD
     const fetchConfig = async () => {
       setLoadingConfig(true);
       try {
-        const res = await fetch(`/api/get-ui-design?designId=${designId}`);
+        // Use the new public API route to prevent login checks
+        const res = await fetch(`/api/public/get-design?designId=${designId}`, {
+          credentials: 'omit', // Explicitly prevent sending cookies
+        });
         const data = await res.json();
-        setConfig(data.config || null);
-      } catch {
+        if (res.ok) {
+          setConfig(data.config || null);
+        } else {
+          console.error("Failed to fetch public UI design:", data.error);
+          setConfig(null);
+        }
+      } catch (err) {
+        console.error("Error fetching UI config:", err);
         setConfig(null);
       } finally {
         setLoadingConfig(false);
@@ -368,16 +377,30 @@ export default function RenderUiDesign({ designId, onFetchedContent }: RenderUiD
 
   const callAssistantAPI = async (text: string): Promise<string> => {
     try {
-      const res = await fetch('/api/chatbot-response', {
+      const res = await fetch('/api/public/chatbot-response', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, designId }),
+        body: JSON.stringify({ 
+          message: text, 
+          designId,
+          // Send the last 5 messages for context
+          conversationHistory: messages.slice(-5).map(({ role, content }) => ({ role, content })) 
+        }),
+        credentials: 'omit', // Do not send cookies or auth headers
       });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error("Error from chatbot API:", errorData);
+        return `Sorry, there was an error: ${errorData.error || 'Unknown error'}`;
+      }
+
       const data = await res.json();
       if (data.fetchedContent) setFetchedContent(data.fetchedContent, data.debug?.matchedIntent, data.debug?.foundUrl);
       if (data.response) return data.response;
-    return 'Sorry, no response.' as string;
-    } catch {
+      return 'Sorry, no response.';
+    } catch (err) {
+      console.error("Failed to contact AI:", err);
       return 'Error contacting AI.';
     }
   };
