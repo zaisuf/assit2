@@ -1,3 +1,4 @@
+import Image from 'next/image';
 'use client'
 
 import React, { useEffect, useState } from 'react';
@@ -150,9 +151,11 @@ const Sidebar: React.FC = () => {
         >
           <div className="w-6 h-6 transition-transform hover:scale-110 rounded-full overflow-hidden bg-gray-700 flex items-center justify-center">
             {userProfile.photoURL ? (
-              <img
+              <Image
                 src={userProfile.photoURL}
                 alt="Profile"
+                width={24}
+                height={24}
                 className="w-full h-full object-cover"
               />
             ) : (
