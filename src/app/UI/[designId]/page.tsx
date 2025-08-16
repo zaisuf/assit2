@@ -29,7 +29,7 @@ export default function Page({ params }: { params: { designId: string } }) {
 
   const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  const callWithRetry = async (fn: () => Promise<any>, retries = 3, delay = 2000) => {
+  const callWithRetry = async (fn: () => Promise<any>, retries = 3, delay = 2000): Promise<any> => {
     try {
       const timeSinceLastCall = Date.now() - lastApiCall;
       if (timeSinceLastCall < API_COOLDOWN) {
