@@ -706,7 +706,15 @@ export default function RenderUiDesign({ designId, onFetchedContent }: RenderUiD
   const renderChatBox = () => {
     if (activeView === 'chat') {
       return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-r from-black via-blue-950 to-gray-900">
+        <div
+          style={{
+            position: 'fixed',
+            bottom: 32,
+            right: 32,
+            zIndex: 1000,
+            // No overlay background
+          }}
+        >
           <div className="flex flex-row items-start">
             <div className="flex flex-col h-[500px] w-[450px] rounded-xl overflow-hidden shadow-2xl border border-white/10"
               style={{ background: config.customBgColor || undefined }}>
