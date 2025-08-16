@@ -1,3 +1,4 @@
+import Image from 'next/image';
 "use client";
 
 import React, { useState } from "react";
@@ -132,9 +133,11 @@ const AIFeaturesSixBoxSection: React.FC = () => {
 													onMouseMove={(e) => handleMouseMove(e, key)}
 													onMouseLeave={() => handleMouseLeave(key)}
 												>
-													<img
+													<Image
 														src={box.img}
 														alt={box.title || `AI Feature ${idx * 2 + bidx + 1}`}
+														width={300}
+														height={300}
 														className="w-full h-full object-cover opacity-40"
 														style={{ pointerEvents: 'none', borderRadius: 0 }}
 													/>
