@@ -377,7 +377,7 @@ export default function RenderUiDesign({ designId, onFetchedContent }: RenderUiD
 
   const callAssistantAPI = async (text: string): Promise<string> => {
     try {
-      const res = await fetch('/api/public/chatbot-response', {
+  const res = await fetch('/api/chatbot-response', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -704,6 +704,8 @@ export default function RenderUiDesign({ designId, onFetchedContent }: RenderUiD
   };
 
   const renderChatBox = () => {
+    // Only show fetched content box in UI design page (not in user page)
+    // This component is only used in UI design page, so we render it here
     if (activeView === 'chat') {
       return (
         <div
@@ -712,7 +714,6 @@ export default function RenderUiDesign({ designId, onFetchedContent }: RenderUiD
             bottom: 32,
             right: 32,
             zIndex: 1000,
-            // No overlay background
           }}
         >
           <div className="flex flex-row items-start">
@@ -725,6 +726,13 @@ export default function RenderUiDesign({ designId, onFetchedContent }: RenderUiD
                   <span className="text-white">🤖</span>
                 </div>
               </div>
+              {/* Fetched Content Box (above chat messages) */}
+              {fetchedContent && (
+                <div className="p-4 bg-emerald-900/80 text-white rounded-b-none rounded-t-xl border-b border-emerald-400 animate-fade-in" style={{margin:0}}>
+                  <div className="font-semibold text-emerald-300 mb-1">Fetched Content</div>
+                  <div className="whitespace-pre-line break-words">{fetchedContent}</div>
+                </div>
+              )}
               {/* Chat Messages */}
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {messages.map((message, index) => (
