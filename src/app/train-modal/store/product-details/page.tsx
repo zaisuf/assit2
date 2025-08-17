@@ -1,5 +1,6 @@
-import Image from 'next/image';
+
 "use client";
+import Image from 'next/image';
 
 import React, { useState } from "react";
 import { auth } from '@/app/api/firebase/firebase';
