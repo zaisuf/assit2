@@ -11,9 +11,9 @@ type FetchedData = {
   url?: string;
 };
 
-export default function Page({ params }: PageProps) {
-  // designId is a dynamic route param (string)
-  const designId = params.designId;
+export default function Page(props: PageProps) {
+  // Defensive: fallback for params if undefined (should not happen in client component)
+  const designId = props?.params?.designId || "";
   const [fetchedData, setFetchedData] = useState<FetchedData | null>(null);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
