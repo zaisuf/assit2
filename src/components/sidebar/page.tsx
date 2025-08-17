@@ -1,6 +1,7 @@
-import Image from 'next/image';
-'use client'
 
+"use client";
+
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { usePathname, useRouter } from 'next/navigation';
@@ -12,6 +13,7 @@ import {
   ArrowRightOnRectangleIcon,
 } from '@heroicons/react/24/outline';
 
+
 interface NavItem {
   name: string;
   path: string;
@@ -20,6 +22,7 @@ interface NavItem {
 
 const Sidebar: React.FC = () => {
   const pathname = usePathname();
+
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
   const [userProfile, setUserProfile] = useState({
