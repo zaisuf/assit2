@@ -1,8 +1,14 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+
 export function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;
+
+    // Always public: widget and public asset routes
+    if (path.startsWith('/UI/') || path.startsWith('/public/')) {
+        return NextResponse.next();
+    }
 
     // Define public paths that don't require authentication
     const isPublicPath = [
@@ -12,12 +18,10 @@ export function middleware(request: NextRequest) {
         '/', 
         '/price'
     ].includes(path) || 
-    path.startsWith('/UI/') ||           // Allow public access to UI widgets
     path.endsWith('.mp4') || 
     path.startsWith('/_next/') || 
     path.startsWith('/static/') ||
     path.startsWith('/videos/') ||
-    path.startsWith('/public/') ||
     path.startsWith('/backgraund/') || // Allow all /backgraund/* images
     path.startsWith('/images/') ||     // Allow all /images/* if you have images there
     path.startsWith('/modal logo/') || // Allow all /modal logo/*
