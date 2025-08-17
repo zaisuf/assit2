@@ -243,7 +243,7 @@ const StorePage: React.FC = () => {
               className="ml-0 px-5 py-2 bg-secondary-cyan text-white rounded font-semibold shadow hover:bg-cyan-700 transition-all text-sm font-sans"
               onClick={() => router.push('/train-modal/store/site-all-pages')}
             >
-              Let's Train Partner
+              Let&apos;s Train Partner
             </button>
             </div>
             <div className="border-t border-white/20 -mx-8 mb-8" style={{ width: 'calc(100% + 4rem)' }}></div>
