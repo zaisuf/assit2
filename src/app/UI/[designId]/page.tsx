@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import RenderUiDesign from "@/components/RenderUiDesign";
 
-// Define PageProps type inline for dynamic route params (must be string)
-type PageProps = { params: { designId: string } };
+// Define UIDesignPageProps type inline for dynamic route params (must be string)
+type UIDesignPageProps = { params: { designId: string } };
 
 type FetchedData = {
   content: string;
@@ -11,9 +11,9 @@ type FetchedData = {
   url?: string;
 };
 
-export default function Page(props: PageProps) {
+export default function Page(props: UIDesignPageProps) {
   // Defensive: fallback for params if undefined (should not happen in client component)
-  const designId = props?.params?.designId || "";
+  const designId = typeof props?.params?.designId === 'string' ? props.params.designId : "";
   const [fetchedData, setFetchedData] = useState<FetchedData | null>(null);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
