@@ -6,8 +6,11 @@ export function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname;
 
     // Always public: widget and public asset routes
-    if (path.startsWith('/UI/') || path.startsWith('/public/')) {
-        return NextResponse.next();
+    if (path.startsWith('/UI/') || path.startsWith('/public/') || path.startsWith('/widget-UI/')) {
+        const response = NextResponse.next();
+        // Allow microphone for UI, widget, and public routes
+        response.headers.set('Permissions-Policy', 'microphone=(self)');
+        return response;
     }
 
     // Define public paths that don't require authentication
@@ -18,6 +21,7 @@ export function middleware(request: NextRequest) {
         '/', 
         '/price'
     ].includes(path) || 
+    path.startsWith('/widget-UI/') || // Allow all /widget-UI/* widget iframe routes
     path.endsWith('.mp4') || 
     path.startsWith('/_next/') || 
     path.startsWith('/static/') ||
@@ -45,6 +49,8 @@ export function middleware(request: NextRequest) {
     // Debug header to help with troubleshooting
     const response = NextResponse.next();
     response.headers.set('x-debug-auth', isAuthenticated ? 'yes' : 'no');
+    // Always set Permissions-Policy for all responses
+    response.headers.set('Permissions-Policy', 'microphone=(self)');
 
     // Redirect authenticated users trying to access login/signup pages to dashboard
     if (isPublicPath && isAuthenticated && (path === '/login' || path === '/signup')) {
