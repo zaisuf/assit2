@@ -1,0 +1,31 @@
+To achieve the glowing bloom effect like the image, you need to use THREE.js postprocessing. Please run the following command in your project root to install the required dependencies:
+
+npm install three @types/three three-stdlib
+
+Then, update your HeroIcosahedron.tsx as follows:
+
+1. Import the postprocessing modules:
+
+import { EffectComposer } from 'three-stdlib/postprocessing/EffectComposer';
+import { RenderPass } from 'three-stdlib/postprocessing/RenderPass';
+import { UnrealBloomPass } from 'three-stdlib/postprocessing/UnrealBloomPass';
+
+2. Replace the renderer.render(scene, camera) call in your animate function with composer.render().
+
+3. Set up the composer and passes after creating the renderer:
+
+const composer = new EffectComposer(renderer);
+const renderPass = new RenderPass(scene, camera);
+const bloomPass = new UnrealBloomPass(
+  new THREE.Vector2(container.offsetWidth, container.offsetHeight),
+  2.0, // strength
+  1.5, // radius
+  0.0  // threshold
+);
+composer.addPass(renderPass);
+composer.addPass(bloomPass);
+
+4. In the handleResize function, also update the composer size:
+composer.setSize(container.offsetWidth, container.offsetHeight);
+
+This will give you a strong, soft bloom effect like the image. If you want, I can apply these changes directly to your file.
