@@ -7,25 +7,9 @@ import AgentSidebar from '@/components/sidebar/page';
 import { doc, getDoc } from 'firebase/firestore';
 import { db, auth } from '@/app/api/firebase/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { downloadFolder } from '@/utils/downloadUtils';
 
-// Download icon component
-const DownloadIcon = () => (
-  <svg 
-    className="w-5 h-5" 
-    fill="none" 
-    stroke="currentColor" 
-    viewBox="0 0 24 24" 
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      strokeWidth={2} 
-      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-    />
-  </svg>
-);
+
+
 
 // Code templates for different languages and frameworks
 interface TemplateFile {
@@ -309,46 +293,7 @@ export default function SdkPage() {
     return modifiedTemplate;
   };
 
-  // Function to handle code or template download
-  const handleDownload = async () => {
-    try {
-      if (selectedLang === 'javascript' || selectedLang === 'react') {
-        const response = await fetch(`/api/templates/${selectedLang}`);
-        const templateData = await response.json() as TemplateResponse;
-        
-        // Download all files in the folder
-        await downloadFolder(templateData.files);
-      } else {
-        // For other languages, download single file
-        const code = getCustomizedCode(codeTemplates[selectedLang]);
-        const getExtension = (lang: LanguageKey): string => {
-          switch(lang) {
-            case 'html': return 'html';
-            case 'python': return 'py';
-            case 'javascript': return 'js';
-            case 'react': return 'jsx';
-            case 'vue': return 'vue';
-            case 'angular': return 'ts';
-            default: return 'txt';
-          }
-        };
-        
-        const filename = `assistlore-widget.${getExtension(selectedLang)}`;
-        const blob = new Blob([code], { type: 'text/plain' });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-      }
-    } catch (error) {
-      console.error('Error downloading template:', error);
-      alert('Failed to download template. Please try again.');
-    }
-  };
+
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-gradient-to-r from-black via-blue-950 to-gray-900 flex">
@@ -460,14 +405,6 @@ export default function SdkPage() {
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Integration Code</h2>
-            <button
-              onClick={handleDownload}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
-              title="Download Code"
-            >
-              <DownloadIcon />
-              <span>Download</span>
-            </button>
           </div>
           <div className="bg-gray-800 rounded-lg p-4 relative group">
             <SyntaxHighlighter
