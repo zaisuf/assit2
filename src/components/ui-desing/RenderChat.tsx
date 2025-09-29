@@ -1,6 +1,113 @@
 "use client";
-import React, { useRef, useEffect, useState } from "react";
+import React from 'react';
+import ProductsFormat from './responce-formet/productsformet';
+import ExplanationFormat from './responce-formet/explanationformet';
+import CodeFormat from './responce-formet/codeformet';
+import StepsFormat from './responce-formet/stepsformet';
+import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
+import styles from '@/styles/modules/animations.module.css';
+
+// Function to format structured responses
+const formatStructuredResponse = (content: string): React.ReactNode => {
+  // Define content type
+  type ContentType = 'explanation' | 'code' | 'steps' | 'products';
+
+  // Helper function to detect content type
+  const detectContentType = (text: string): ContentType => {
+    const lowerText = text.toLowerCase();
+    
+    // Check for code blocks first (both with and without language specifiers)
+    if (text.includes('```') || text.match(/```[a-z]*/i)) {
+      console.log('Response Format Type: Code Format');
+      return 'code';
+    }
+    // Then check for explicit code: prefix
+    if (lowerText.includes('code:')) return 'code';
+
+    // Check for step-by-step content patterns
+    if (
+      lowerText.startsWith('how to') ||
+      lowerText.startsWith('how do i') ||
+      lowerText.startsWith('how can i') ||
+      lowerText.startsWith('steps to') ||
+      lowerText.includes('steps:') ||
+      lowerText.includes('guide:') ||
+      lowerText.includes('instructions:') ||
+      text.match(/^\d+\./m) ||
+      lowerText.match(/^step \d/m) ||
+      (lowerText.includes('how') && lowerText.includes('?'))
+    ) return 'steps';
+
+    // Check other types
+    if (lowerText.includes('explanation:') || text.includes('#')) return 'explanation';
+    if (lowerText.includes('product:') || lowerText.includes('price:')) return 'products';
+    return 'explanation';
+  };
+
+  // Add contextual emojis if needed
+  const addContextualEmoji = (text: string): string => {
+    const emojiMap: Record<string, string> = {
+      'explanation:': '💡 ',
+      'code:': '� ',
+      'steps:': '� ',
+      'products:': '�️ ',
+    };
+
+    return Object.entries(emojiMap).reduce((acc, [key, emoji]) => {
+      return acc.replace(new RegExp(`^${key}`, 'i'), emoji);
+    }, text);
+  };
+  
+  // Process the content with smart formatting
+  const type = detectContentType(content);
+  
+  // Split content into main text and source URL if present
+  const [mainContent, ...sourceUrlParts] = content.split('\n\nSource: ');
+  const sourceUrl = sourceUrlParts.join('\n\nSource: ');
+  
+  let processed = mainContent;
+  
+  // Only remove prefixes and markers for non-code content
+  if (type !== 'code') {
+    processed = mainContent
+      .replace(/^(Explanation|Comparison|Steps|Products):\s*/i, '')
+      .replace(/[-*]/g, '')
+      .trim();
+  } else {
+    // For code, just trim whitespace
+    processed = mainContent.trim();
+  }
+
+  // Format content based on type
+  const formattedContent = (() => {
+    switch (type) {
+      case 'products':
+        return <ProductsFormat content={processed} />;
+      case 'code':
+        return <CodeFormat content={processed} />;
+      case 'steps':
+        return <StepsFormat content={processed} />;
+      case 'explanation':
+      default:
+        return <ExplanationFormat content={processed} />;
+    }
+  })();
+
+  // Return the formatted content with source URL if present
+  return (
+    <div className="space-y-4">
+      {formattedContent}
+      {sourceUrl && (
+        <div className="text-sm text-gray-400 mt-2">
+          Source: <a href={sourceUrl} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">
+            {sourceUrl}
+          </a>
+        </div>
+      )}
+    </div>
+  );
+};
 import { Send, ArrowUpRight, ArrowRight, Paperclip, SendHorizonal, Plus, ChevronDown } from 'lucide-react';
 
 // Response Card Styles (with shape options)
@@ -335,6 +442,22 @@ const SEND_ICONS = [
   'Send Horizontal'
 ] as const;
 
+// Context box component to show fetched content
+function ContextBox({ content, isVisible }: { content: string; isVisible: boolean }) {
+  if (!isVisible || !content) return null;
+
+  return (
+    <div className="fixed bottom-24 left-4 z-40 p-4 rounded-lg bg-gray-800/50 border border-gray-700 w-[300px] max-h-[200px] overflow-y-auto">
+      <div className="flex items-center mb-2">
+        <h3 className="text-sm font-medium text-gray-300">Context from page</h3>
+      </div>
+      <div className="text-sm text-gray-400">
+        {content}
+      </div>
+    </div>
+  );
+}
+
 export default function RenderChat({ designId }: { designId: string }) {
   // List of all possible Tailwind background classes used in config
   const tailwindBgClasses = [
@@ -407,11 +530,84 @@ export default function RenderChat({ designId }: { designId: string }) {
       'Glass': 'bg-white/10 backdrop-blur border border-white/20 text-white rounded-xl hover:bg-white/20',
     };
   // Fetch chatBotBox config from API (like RenderUiDesign)
+  const MODEL_OPTIONS = [
+    // Groq Models
+    { label: "Groq", value: "groq" },
+    { label: "GPT-OSS-120B", value: "openai/gpt-oss-120b" },
+    { label: "GPT-OSS-20B", value: "openai/gpt-oss-20b" },
+    // OpenRouter Models
+    { label: "Phi-4", value: "phi-4" },
+    { label: "Gemini 2.0 Flash", value: "google/gemini-2.0-flash-001" },
+    { label: "Gemini Pro 1.5", value: "google/gemini-pro-1.5" },
+    { label: "Gemini 2.5 Flash Lite", value: "google/gemini-2.5-flash-lite" },
+    { label: "DeepSeek R1 Qwen3", value: "deepseek/deepseek-r1-0528-qwen3-8b" },
+    { label: "DeepSeek R1", value: "deepseek/deepseek-r1" },
+    { label: "Mistral Medium", value: "mistral-medium-latest" },
+    { label: "GPT-5 Mini", value: "gpt-5-mini" },
+    { label: "GPT-5 Nano", value: "gpt-5-nano" },
+    { label: "GPT-4.1 Mini", value: "gpt-4.1-mini" },
+    { label: "GPT-4o Mini", value: "gpt-4o-mini" },
+    { label: "GPT-3.5 Turbo", value: "gpt-3.5-turbo" },
+    { label: "Kimi K2", value: "kimi-k2" },
+    { label: "Grok 3 Mini", value: "grok-3-mini" },
+    { label: "Grok 3 Mini Beta", value: "grok-3-mini-beta" },
+    { label: "Claude 3 Haiku", value: "anthropic/claude-3-haiku" },
+    { label: "DeepSeek Chat v3.1", value: "deepseek/deepseek-chat-v3.1" }
+  ];
+
   const [config, setConfig] = useState<any>(null);
   const [loadingConfig, setLoadingConfig] = useState(true);
   const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([]);
   const [inputText, setInputText] = useState("");
+  const lastUserMessageRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  
+  // Only auto-scroll when user sends a new message
+  const [userScrolled, setUserScrolled] = useState(false);
+
+  useEffect(() => {
+    if (messagesContainerRef.current && messages.length > 0) {
+      const container = messagesContainerRef.current;
+      const lastMessage = messages[messages.length - 1];
+      
+      // Only auto-scroll if:
+      // 1. User hasn't manually scrolled, or
+      // 2. It's a user message (indicating user just sent something)
+      if (!userScrolled || lastMessage.role === 'user') {
+        const scrollToBottom = () => {
+          container.scrollTop = container.scrollHeight;
+        };
+        
+        scrollToBottom();
+      }
+    }
+  }, [messages, userScrolled]);
+
+  // Track when user manually scrolls
+  useEffect(() => {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const isAtBottom = container.scrollHeight - container.scrollTop === container.clientHeight;
+      setUserScrolled(!isAtBottom);
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, []);
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingPosition, setLoadingPosition] = useState<{ top: number; left: number } | null>(null);
+  const [selectedModel, setSelectedModel] = useState<'groq' | 'openai/gpt-oss-120b' | 'openai/gpt-oss-20b' | 'phi-4' | 'qwen3-32b' | 'mistral-medium-latest' | 'gpt-5-mini' | 'gpt-5-nano' | 'gpt-4.1-mini' | 'gpt-4o-mini' | 'gpt-3.5-turbo' | 'kimi-k2' | 'grok-3-mini' | 'grok-3-mini-beta' | 'anthropic/claude-3-haiku' | 'deepseek/deepseek-chat-v3.1' | 'google/gemini-2.0-flash-001' | 'google/gemini-pro-1.5' | 'google/gemini-2.5-flash-lite' | 'deepseek/deepseek-r1-0528-qwen3-8b' | 'deepseek/deepseek-r1'>('groq');
+  const [contextBlocks, setContextBlocks] = useState<any[]>([]);
+  const [showContext, setShowContext] = useState(false);
+
+  // Handle context display only
+  const handleContextDisplay = (content: string) => {
+    if (!content) return;
+    setContextBlocks([{ text: content }]);
+    setShowContext(true);
+  };
 
   useEffect(() => {
     const fetchConfig = async () => {
@@ -438,6 +634,54 @@ export default function RenderChat({ designId }: { designId: string }) {
     };
     if (designId) fetchConfig();
   }, [designId]);
+
+  // When config loads, auto-select the model saved in Firebase
+  useEffect(() => {
+    if (!config) return;
+
+    console.log('Config for model selection:', config);
+
+    // Try multiple possible keys that may contain the saved model name
+    const candidateKeys = [
+      'selectedBotModalName', // user's provided key (typo modal vs model)
+      'selectedBotModelName',
+      'selectedBotModel',
+      'selectedModel',
+      'selectedModelName'
+    ];
+
+    let savedName: string | undefined;
+    for (const k of candidateKeys) {
+      const v = (config as any)[k];
+      if (v && typeof v === 'string') {
+        savedName = v.trim();
+        console.log(`Found saved model name in key '${k}':`, savedName);
+        break;
+      }
+    }
+
+    if (!savedName) {
+      console.log('No saved model name found in config');
+      return;
+    }
+
+    // Try to find a matching option by value or label (case-insensitive)
+    const found = MODEL_OPTIONS.find(opt => {
+      if (!opt) return false;
+      const val = (opt.value || '').toString().trim().toLowerCase();
+      const label = (opt.label || '').toString().trim().toLowerCase();
+      const s = savedName!.toString().trim().toLowerCase();
+      return val === s || label === s;
+    });
+
+    if (found) {
+      console.log('Auto-selecting model from config:', found.value);
+      setSelectedModel(found.value as any);
+    } else {
+      console.log('Saved model name not found in MODEL_OPTIONS:', savedName);
+      console.log('Available MODEL_OPTIONS:', MODEL_OPTIONS.map(opt => ({ value: opt.value, label: opt.label })));
+    }
+  }, [config]);
 
   // Helper to get animation component by name from LOADING_ANIMATIONS
   const LOADING_ANIMATIONS = [
@@ -565,16 +809,54 @@ export default function RenderChat({ designId }: { designId: string }) {
         },
         body: JSON.stringify({
           message: userMessage,
-          designId: designId
+          designId: designId,
+          model: selectedModel
         })
       });
 
+      const data = await response.json();
+      console.log('API response data:', data); // Debug log
+
       if (!response.ok) {
-        throw new Error('Failed to get response');
+        throw new Error(data.error || 'Failed to get response');
       }
 
-      const data = await response.json();
-      setMessages((prev) => [...prev, { role: "assistant", content: data.response }]);
+      // Handle fetched content if available
+      if (data.fetchedContent) {
+        try {
+          // Parse the fetched content into blocks
+          const sentences: string[] = data.fetchedContent.split(/[.!?]/).filter((s: string) => s.trim().length > 30);
+          const newBlocks = sentences.map((text: string) => ({
+            text: text.trim()
+          }));
+          setContextBlocks(newBlocks);
+          setShowContext(true);
+        } catch (err) {
+          console.error("Error parsing context:", err);
+          setContextBlocks([]);
+          setShowContext(false);
+        }
+      } else {
+        setContextBlocks([]);
+        setShowContext(false);
+      }
+
+      if (data.error) {
+        setMessages((prev) => [...prev, { role: "assistant", content: `Error: ${data.error}` }]);
+        return;
+      }
+
+      if (data.response && typeof data.response === 'string' && data.response.trim().length > 0) {
+        const responseContent = data.response;
+        const urlInfo = data.debug?.foundUrl ? `\n\nSource: ${data.debug.foundUrl}` : '';
+        setMessages((prev) => [...prev, { role: "assistant", content: responseContent + urlInfo }]);
+      } else {
+        let errorMessage = '[No response from model]';
+        if (data.debug?.usedModel) {
+          errorMessage = `[No response from ${data.debug.usedModel}]`;
+        }
+        setMessages((prev) => [...prev, { role: "assistant", content: errorMessage }]);
+      }
     } catch (error) {
       console.error('Error:', error);
       setMessages((prev) => [...prev, { role: "assistant", content: "I apologize, but I'm having trouble responding right now. Please try again later." }]);
@@ -586,6 +868,8 @@ export default function RenderChat({ designId }: { designId: string }) {
   if (loadingConfig) return <div className="text-white text-xl p-12">Loading...</div>;
   if (!config) return <div className="text-white text-xl p-12">Chatbot config not found.</div>;
 
+  const contextContent = contextBlocks.map(block => block.text).join("\n");
+  
   // Debug log to check the shape value
   console.log('RenderChat config shape:', {
     selectedUiShape: config?.selectedUiShape,
@@ -796,7 +1080,7 @@ export default function RenderChat({ designId }: { designId: string }) {
     <>
       {/* Down Arrow Button */}
       <button 
-        className="absolute left-2 top-10 p-1.5 bg-gray-800/50 hover:bg-gray-700/50 rounded-full transition-colors duration-200 scale-90"
+        className="absolute left-2 top-2 p-1.5 bg-gray-800/50 hover:bg-gray-700/50 rounded-full transition-colors duration-200 scale-90"
         onClick={handleClose}
         title="Close chat"
       >
@@ -814,6 +1098,9 @@ export default function RenderChat({ designId }: { designId: string }) {
       <div className="hidden">
         {tailwindBgClasses.map(cls => <div key={cls} className={cls} />)}
       </div>
+
+      {/* No Context Fetch UI needed */}
+
       <div
         className={`${isTailwindBg ? bgValue : ''} flex flex-col border border-gray-200 overflow-hidden !${config?.selectedUiShape || 'rounded-xl'}`}
         style={{
@@ -864,6 +1151,19 @@ export default function RenderChat({ designId }: { designId: string }) {
                 textTransform: config.selectedTextStyle === "Uppercase" ? "uppercase" : "none"
               }}
             >{headerText}</span>
+            {/* Model Selector Dropdown */}
+            <select
+              value={selectedModel}
+              onChange={e => setSelectedModel(e.target.value as typeof selectedModel)}
+              className="bg-black/40 text-white rounded-lg px-3 py-1.5 border border-white/20 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 text-sm font-medium"
+              style={{ minWidth: 200 }}
+            >
+              {MODEL_OPTIONS.map(option => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex items-center space-x-2">
             <button 
@@ -881,51 +1181,54 @@ export default function RenderChat({ designId }: { designId: string }) {
           </div>
         </div>
 
+        {/* Context Box */}
+        <ContextBox 
+          content={contextContent}
+          isVisible={showContext}
+        />
+
         {/* Messages */}
-        <div style={{
-          flex: 1,
-          padding: '24px',
-          background: 'transparent',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 14,
-          overflowY: 'auto',
-          overscrollBehavior: 'contain',
-          msOverflowStyle: 'none',
-          scrollbarWidth: 'thin',
-        }}>
-          {isLoading && (
-            <div className="flex items-center gap-3 p-3 pl-0" style={{ alignSelf: 'flex-start', maxWidth: '80%' }}>
-              <div className="w-8 h-8 rounded-full bg-black/30 backdrop-blur flex items-center justify-center">
-                {config?.assistantBotLogo ? (
-                  <Image src={config.assistantBotLogo} alt={headerText} width={24} height={24} className="w-6 h-6 object-contain" unoptimized={typeof config.assistantBotLogo === 'string' && config.assistantBotLogo.startsWith('http')} />
-                ) : config?.customHeaderLogo ? (
-                  <Image src={config.customHeaderLogo} alt={headerText} width={24} height={24} className="w-6 h-6 object-contain" unoptimized={typeof config.customHeaderLogo === 'string' && config.customHeaderLogo.startsWith('http')} />
-                ) : (
-                  <span className="text-white text-sm">AI</span>
-                )}
-              </div>
-              {/* Dynamically render selected loading animation from Firebase config */}
-              {(() => {
-                const rawAnim = config?.selectedLoadingAnimation?.name || config?.selectedLoadingAnimation || '';
-                console.log('Selected Loading Animation from Firebase:', rawAnim);
-                const AnimationComp = getLoadingAnimationComponent(rawAnim);
-                // Use custom loading color if set, otherwise use selected color, with fallback
-                const loadingColor = config?.customLoadingColor || config?.selectedLoadingColor || '#10b981';
-                console.log('Loading Animation Color:', loadingColor);
-                return <AnimationComp color={loadingColor} />;
-              })()}
-            </div>
-          )}
+        <div 
+          ref={messagesContainerRef}
+          className={styles.dynamicHeight}
+          style={{
+            flex: 1,
+            padding: '16px',
+            paddingBottom: '80px',
+            background: 'transparent',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 16,
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            overscrollBehavior: 'contain',
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'thin',
+            position: 'relative',
+            minHeight: '200px',
+            maxHeight: 'calc(100% - 80px)',
+            height: '100%',
+            scrollBehavior: 'auto',
+            WebkitOverflowScrolling: 'touch'
+          }}>
           {messages.map((msg, idx) => (
             <div
               key={idx}
+              ref={msg.role === 'user' && idx === messages.length - 1 ? lastUserMessageRef : null}
               className={`
                 ${config?.selectedResponseCardStyle ? getResponseCardStyleClass(config.selectedResponseCardStyle) : ''}
                 ${config?.selectedTextStyle ? getTextStyleClass(config.selectedTextStyle) : ''}
+                ${styles.messageContainer}
+                transform-gpu
               `.trim()}
+              data-last-message={idx === messages.length - 1 ? 'true' : undefined}
               style={{
                 alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
+                marginBottom: '16px',
+                position: 'relative',
+                zIndex: msg.role === 'user' ? 2 : 1,
+                minHeight: 'fit-content',
+                height: 'auto',
                 ...(msg.role === 'user'
                   ? {
                       // For user messages, use the same style system as assistant messages
@@ -1105,13 +1408,86 @@ export default function RenderChat({ designId }: { designId: string }) {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <div className="message-content">{msg.content}</div>
+                    <div className="message-content">
+                      {msg.role === 'assistant' ? formatStructuredResponse(msg.content) : msg.content}
+                    </div>
                   </div>
                 </div>
               )}
               {msg.role === 'user' && msg.content}
             </div>
           ))}
+          {isLoading && (
+            <div
+              className={`
+                ${config?.selectedResponseCardStyle ? getResponseCardStyleClass(config.selectedResponseCardStyle) : ''}
+                ${config?.selectedTextStyle ? getTextStyleClass(config.selectedTextStyle) : ''}
+              `.trim()}
+              style={{
+                alignSelf: 'flex-start',
+                maxWidth: '80%',
+                padding: '12px 16px',
+                fontSize: 14,
+                wordBreak: 'break-word',
+                whiteSpace: 'pre-wrap',
+                background: (() => {
+                  if (config?.responseCardCustomBackgroundColor) {
+                    return config.responseCardCustomBackgroundColor;
+                  }
+                  if (config?.selectedResponseCardStyle) {
+                    const style = config.selectedResponseCardStyle;
+                    if (typeof style === 'object') {
+                      if (style.backgroundColor) return style.backgroundColor;
+                      if (style.name) {
+                        const found = RESPONSE_CARD_STYLES.find(s => s.name === style.name);
+                        if (found?.backgroundColor) return found.backgroundColor;
+                      }
+                    } else if (typeof style === 'string') {
+                      const found = RESPONSE_CARD_STYLES.find(s => s.name === style);
+                      if (found?.backgroundColor) return found.backgroundColor;
+                    }
+                  }
+                  return '#fff';
+                })()
+              }}
+            >
+              <div className="flex gap-3">
+                <div className="flex-shrink-0">
+                  <div className="w-4 h-4 rounded-full bg-black/30 backdrop-blur flex items-center justify-center overflow-hidden ml-[-6px] mt-1">
+                    {config?.assistantBotLogo ? (
+                      <Image
+                        src={config.assistantBotLogo}
+                        alt={headerText}
+                        width={10}
+                        height={10}
+                        className="w-2.5 h-2.5 object-cover"
+                        unoptimized={typeof config.assistantBotLogo === 'string' && config.assistantBotLogo.startsWith('http')}
+                      />
+                    ) : config?.customHeaderLogo ? (
+                      <Image
+                        src={config.customHeaderLogo}
+                        alt={headerText}
+                        width={10}
+                        height={10}
+                        className="w-2.5 h-2.5 object-cover"
+                        unoptimized={typeof config.customHeaderLogo === 'string' && config.customHeaderLogo.startsWith('http')}
+                      />
+                    ) : (
+                      <span className="text-white text-xs">AI</span>
+                    )}
+                  </div>
+                </div>
+                <div className="flex-1">
+                  {(() => {
+                    const rawAnim = config?.selectedLoadingAnimation?.name || config?.selectedLoadingAnimation || '';
+                    const AnimationComp = getLoadingAnimationComponent(rawAnim);
+                    const loadingColor = config?.customLoadingColor || config?.selectedLoadingColor || '#10b981';
+                    return <AnimationComp color={loadingColor} />;
+                  })()}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         {/* Footer/Input */}
         <div
@@ -1145,6 +1521,12 @@ export default function RenderChat({ designId }: { designId: string }) {
             placeholder={config.inputPlaceholder || 'Type here...'}
             value={inputText}
             onChange={e => setInputText(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSendMessage();
+              }
+            }}
           />
           <button
               onClick={handleSendMessage}
