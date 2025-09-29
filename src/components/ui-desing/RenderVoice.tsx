@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { VoiceCallContainer } from "@/app/agent/components/voicecall";
 
 export default function RenderVoice({ config }: { config?: any }) {
@@ -582,7 +582,7 @@ export default function RenderVoice({ config }: { config?: any }) {
     return buffer;
   }
 
-  const startMicStream = async () => {
+  const startMicStream = useCallback(async () => {
     if (isRecordingMicRef.current) return;
     try {
       // close any existing
@@ -653,7 +653,7 @@ export default function RenderVoice({ config }: { config?: any }) {
       setSttError(err?.message || String(err));
       await stopMicStream();
     }
-  };
+  }, [languageCode, setIsRecordingMic, setSttError, setInputText]);
 
   const stopMicStream = async () => {
     isRecordingMicRef.current = false;
@@ -696,7 +696,7 @@ export default function RenderVoice({ config }: { config?: any }) {
   };
 
   // WebRTC + VAD recording start function
-  const startWebRTCVADRecording = () => {
+  const startWebRTCVADRecording = useCallback(() => {
     if (!window.localStorage.getItem('micPromptShown')) {
       const allow = window.confirm(
         'To use voice features, please allow microphone access in your browser when prompted.\n\nClick OK to continue and grant access.'
@@ -711,7 +711,7 @@ export default function RenderVoice({ config }: { config?: any }) {
         vadIsRecordingRef.current = true;
         setMicLoading(false);
         vadChunksRef.current = [];
-        
+
         const mediaRecorder = new MediaRecorder(stream);
         vadMediaRecorderRef.current = mediaRecorder;
         mediaRecorder.ondataavailable = (e) => {
@@ -773,7 +773,7 @@ export default function RenderVoice({ config }: { config?: any }) {
         }
         alert(msg);
       });
-  };
+  }, [setMicLoading]);
 
   // Stop VAD and clean up
   const stopWebRTCVAD = () => {
@@ -856,7 +856,7 @@ export default function RenderVoice({ config }: { config?: any }) {
     };
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, []);
+  }, [startMicStream]);
 
   // Update STT mic when mute state changes
   useEffect(() => {
@@ -865,13 +865,13 @@ export default function RenderVoice({ config }: { config?: any }) {
     } else if (!isRecordingMic) {
       startMicStream();
     }
-  }, [isMicMuted]);
+  }, [isMicMuted, startMicStream, isRecordingMic]);
 
   // Automatically start voice recording and STT mic when voice interface opens
   useEffect(() => {
     startWebRTCVADRecording();
     startMicStream();
-  }, []);
+  }, [startWebRTCVADRecording, startMicStream]);
 
   const handleSendMessage = async (text: string) => {
     if (!text || !text.trim()) return;
