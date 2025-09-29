@@ -6,7 +6,7 @@ import CodeFormat from './responce-formet/codeformet';
 import StepsFormat from './responce-formet/stepsformet';
 import { useRef, useEffect, useState, useMemo } from "react";
 import Image from "next/image";
-import styles from '@/styles/modules/animations.module.css';
+import styles from '../../styles/modules/animations.module.css';
 
 // Function to format structured responses
 const formatStructuredResponse = (content: string): React.ReactNode => {
