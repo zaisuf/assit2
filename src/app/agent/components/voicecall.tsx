@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from 'next/image';
 
 interface VoiceBotBoxProps {
@@ -17,6 +17,15 @@ interface VoiceBotBoxProps {
   onStopRecording?: () => void; // Added for voice recording control
   isRecording?: boolean; // Added for recording state
   isLoading?: boolean; // Added for loading state
+  languageOptions?: Array<{code: string, label: string}>; // Language options
+  onLanguageChange?: (code: string) => void; // Language change handler
+  currentLanguage?: string; // Current selected language
+  onStopMic?: () => void; // Added for stopping STT mic
+  onToggleMicMute?: () => void; // Added for toggling STT mic mute
+  isMicMuted?: boolean; // Added for STT mic mute state
+  isLLMLoading?: boolean; // Added for LLM loading state
+  isRecordingMic?: boolean; // Added for STT mic recording state
+  gifScale?: number; // Added for GIF scale animation
 }
 
 const DEFAULT_WEDGET_SIZE = "w-[200px] h-[156px]";
@@ -24,22 +33,67 @@ const DEFAULT_WEDGET_SIZE = "w-[200px] h-[156px]";
 
 
 
-const VoiceBotBox: React.FC<VoiceBotBoxProps> = ({ 
-  sizeClass, 
-  shapeClass, 
-  customBgColor, 
-  videoSrc, 
-  onMinimize, 
-  disconnectBtnSize, 
-  disconnectBtnColor, 
-  disconnectBtnTextColor, 
-  disconnectBtnIconStyle, 
+const VoiceBotBox: React.FC<VoiceBotBoxProps> = ({
+  sizeClass,
+  shapeClass,
+  customBgColor,
+  videoSrc,
+  onMinimize,
+  disconnectBtnSize,
+  disconnectBtnColor,
+  disconnectBtnTextColor,
+  disconnectBtnIconStyle,
   minimizeBtnIconStyle,
   onStartRecording,
   onStopRecording,
   isRecording,
-  isLoading
+  isLoading,
+  languageOptions,
+  onLanguageChange,
+  currentLanguage,
+  onStopMic,
+  onToggleMicMute,
+  isMicMuted,
+  isLLMLoading,
+  isRecordingMic,
+  gifScale
 }) => {
+  const [timer, setTimer] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Update video playback and visibility based on TTS speaking
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 1; // Normal playback (reverse not supported in all browsers)
+      if ((gifScale || 1) > 1) {
+        videoRef.current.play();
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, [gifScale]);
+
+  // Auto-start recording when component mounts
+  useEffect(() => {
+    if (onStartRecording && !isRecording) {
+      onStartRecording();
+    }
+  }, [onStartRecording, isRecording]);
+
+  // Timer effect
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    if (isRecordingMic) {
+      interval = setInterval(() => {
+        setTimer(prev => prev + 1);
+      }, 1000);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isRecordingMic]);
+
   let heightClass = "h-[180px]";
   if (sizeClass?.includes("w-[300px]")) heightClass = "h-[230px]";
   else if (sizeClass?.includes("w-[320px]")) heightClass = "h-[250px]";
@@ -60,6 +114,39 @@ const VoiceBotBox: React.FC<VoiceBotBoxProps> = ({
     normalizedSrc = '/' + normalizedSrc;
   }
   return (
+  <>
+    <style>
+      {`
+        .voicebot-language-select::-webkit-scrollbar {
+          display: none;
+        }
+        .voicebot-language-select {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        .loading-text {
+          font-style: italic;
+          font-weight: 100;
+          font-size: 0.65rem;
+          font-family: sans-serif;
+          animation: colorPulse 1.5s infinite;
+        }
+        .loading-text::after {
+          content: '';
+          animation: blinkDots 1.5s infinite;
+        }
+        @keyframes colorPulse {
+          0%, 100% { color: #ffffff; }
+          50% { color: #10b981; }
+        }
+        @keyframes blinkDots {
+          0%, 20% { content: ''; }
+          40% { content: '.'; }
+          60% { content: '..'; }
+          80%, 100% { content: '...'; }
+        }
+      `}
+    </style>
   <div className="fixed z-10" style={{ bottom: '0.5rem', right: '0.3rem', position: 'fixed' }}>
       <div
         className={`relative flex flex-col overflow-hidden shadow-2xl border border-white/10 ${cleanedSizeClass} ${heightClass} ${shapeClass || "rounded-full"}`}
@@ -112,15 +199,37 @@ const VoiceBotBox: React.FC<VoiceBotBoxProps> = ({
             })()}
           </span>
         </button>
-        {/* Loading spinner animation in header */}
-        <div className="absolute top-1 left-2 z-20 flex items-center" aria-label="Loading">
-          <span className="inline-block w-4 h-4">
-            <svg className="animate-spin" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="8" cy="8" r="7" stroke="#fff" strokeOpacity="0.2" strokeWidth="2" />
-              <path d="M8 1a7 7 0 0 1 7 7" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+        {/* Mute icon next to minimize icon */}
+        <button
+          className="absolute top-0 right-10 z-20"
+          onClick={() => onToggleMicMute?.()}
+          title={isMicMuted ? 'Unmute chat mic' : 'Mute chat mic'}
+          style={{
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '4px'
+          }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="9" y="4" width="6" height="12" rx="3" stroke={disconnectBtnTextColor || '#fff'} strokeWidth="2" fill="none"/>
+            <path d="M5 11v2a7 7 0 0014 0v-2" stroke={disconnectBtnTextColor || '#fff'} strokeWidth="2" fill="none"/>
+            <line x1="12" y1="20" x2="12" y2="22" stroke={disconnectBtnTextColor || '#fff'} strokeWidth="2"/>
+            {isMicMuted && <line x1="2" y1="2" x2="22" y2="22" stroke={disconnectBtnTextColor || '#fff'} strokeWidth="2"/>}
+          </svg>
+        </button>
+        {/* Getting Context loading text in header */}
+        {(isLoading || isLLMLoading) && (
+          <div className="absolute top-1 left-2 z-20 flex items-center gap-1" aria-label="Getting Context">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gray-400">
+              <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
+              <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-          </span>
-        </div>
+            <span className="text-gray-400 text-xs font-medium animate-pulse italic font-extralight" style={{ fontSize: '0.65rem', fontFamily: 'sans-serif' }}>
+              Getting Context...
+            </span>
+          </div>
+        )}
         {/* Header line */}
         <div className="w-full h-px bg-white/10 mt-6 mb-2 border-b border-white/10" />
         {/* Voice Bot Box content with video/gif animation */}
@@ -132,15 +241,17 @@ const VoiceBotBox: React.FC<VoiceBotBoxProps> = ({
                 width={82}
                 height={82}
                 className="absolute top-1/2 left-1/2 object-cover"
-                style={{ transform: 'translate(-50%, -50%)', background: 'transparent' }}
+                style={{ transform: `translate(-50%, -50%) scale(${gifScale || 1})`, background: 'transparent', transition: 'transform 0.1s ease' }}
                 alt="Voice Bot GIF"
                 onError={() => {}}
+                unoptimized
               />
             ) : (
               <video
+                ref={videoRef}
                 src={normalizedSrc && normalizedSrc !== '' ? normalizedSrc : "/bubble3.mp4"}
                 className="absolute top-1/2 left-1/2 w-[82px] h-[82px] object-cover"
-                style={{ transform: 'translate(-50%, -50%)', background: 'transparent' }}
+                style={{ transform: `translate(-50%, -50%) scale(${gifScale || 1})`, background: 'transparent', transition: 'transform 0.1s ease' }}
                 autoPlay
                 loop
                 muted
@@ -149,7 +260,9 @@ const VoiceBotBox: React.FC<VoiceBotBoxProps> = ({
             )}
           </div>
           {/* Video timer display */}
-          <div className="mt-2 text-xs text-white/80 font-mono tracking-wide">00:00</div>
+          <div className="mt-2 text-xs text-white/80 font-mono tracking-wide">
+            {String(Math.floor(timer / 60)).padStart(2, '0')}:{String(timer % 60).padStart(2, '0')}
+          </div>
            {/* Disconnect button below video and timer */}
            <button
              className={`mt-10 rounded-full font-bold shadow focus:outline-none flex items-center gap-1 ${
@@ -255,34 +368,41 @@ const VoiceBotBox: React.FC<VoiceBotBoxProps> = ({
              Disconnect
            </button>
           {/* Select languages section */}
-          <div className="-mt-16 w-full flex flex-row items-center justify-between">
+          <div className="-mt-16 w-full flex flex-row items-center justify-end">
             <select
               id="voicebot-language-select"
-              className="w-[50px] px-0 py-0.5 rounded text-xs border focus:outline-none self-start"
+              className="voicebot-language-select w-[50px] px-0 py-0.5 rounded text-xs border focus:outline-none self-start"
               style={{
-                marginLeft: 72,
                 background: customBgColor ? customBgColor : 'rgba(0,0,0,0.3)',
                 color: disconnectBtnTextColor || '#fff',
-                borderColor: disconnectBtnTextColor || 'rgba(255,255,255,0.1)'
+                borderColor: disconnectBtnTextColor || 'rgba(255,255,255,0.1)',
+                marginRight: 120
               }}
-              defaultValue="en"
+              value={currentLanguage || 'en'}
+              onChange={(e) => onLanguageChange?.(e.target.value)}
             >
-              <option value="en">English</option>
-              <option value="hi">Hindi</option>
-              <option value="es">Spanish</option>
-              <option value="fr">French</option>
-              <option value="ar">Arabic</option>
-              <option value="zh">Chinese</option>
-              <option value="ru">Russian</option>
-              <option value="de">German</option>
-              <option value="ja">Japanese</option>
-              <option value="pt">Portuguese</option>
+              {(languageOptions || [
+                { code: 'en', label: 'English' },
+                { code: 'hi', label: 'Hindi' },
+                { code: 'es', label: 'Spanish' },
+                { code: 'fr', label: 'French' },
+                { code: 'ar', label: 'Arabic' },
+                { code: 'zh', label: 'Chinese' },
+                { code: 'ru', label: 'Russian' },
+                { code: 'de', label: 'German' },
+                { code: 'ja', label: 'Japanese' },
+                { code: 'pt', label: 'Portuguese' }
+              ]).map(lang => (
+                <option key={lang.code} value={lang.code}>
+                  {lang.label}
+                </option>
+              ))}
             </select>
-            {/* Mic mute/unmute icon button removed as requested */}
           </div>
         </div>
       </div>
     </div>
+  </>
   );
 };
 
@@ -364,6 +484,8 @@ export const VoiceCallContainer: React.FC<VoiceBotBoxProps> = (props) => {
       {...props}
       onMinimize={() => setMinimized(true)}
       minimizeBtnIconStyle={props.minimizeBtnIconStyle}
+      isRecordingMic={props.isRecordingMic}
+      gifScale={props.gifScale}
     />
   );
 };
