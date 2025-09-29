@@ -4,7 +4,7 @@ import ProductsFormat from './responce-formet/productsformet';
 import ExplanationFormat from './responce-formet/explanationformet';
 import CodeFormat from './responce-formet/codeformet';
 import StepsFormat from './responce-formet/stepsformet';
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import styles from '@/styles/modules/animations.module.css';
 
@@ -530,7 +530,7 @@ export default function RenderChat({ designId }: { designId: string }) {
       'Glass': 'bg-white/10 backdrop-blur border border-white/20 text-white rounded-xl hover:bg-white/20',
     };
   // Fetch chatBotBox config from API (like RenderUiDesign)
-  const MODEL_OPTIONS = [
+  const MODEL_OPTIONS = useMemo(() => [
     // Groq Models
     { label: "Groq", value: "groq" },
     { label: "GPT-OSS-120B", value: "openai/gpt-oss-120b" },
@@ -553,7 +553,7 @@ export default function RenderChat({ designId }: { designId: string }) {
     { label: "Grok 3 Mini Beta", value: "grok-3-mini-beta" },
     { label: "Claude 3 Haiku", value: "anthropic/claude-3-haiku" },
     { label: "DeepSeek Chat v3.1", value: "deepseek/deepseek-chat-v3.1" }
-  ];
+  ], []);
 
   const [config, setConfig] = useState<any>(null);
   const [loadingConfig, setLoadingConfig] = useState(true);
