@@ -681,7 +681,7 @@ export default function RenderChat({ designId }: { designId: string }) {
       console.log('Saved model name not found in MODEL_OPTIONS:', savedName);
       console.log('Available MODEL_OPTIONS:', MODEL_OPTIONS.map(opt => ({ value: opt.value, label: opt.label })));
     }
-  }, [config]);
+  }, [config, MODEL_OPTIONS]);
 
   // Helper to get animation component by name from LOADING_ANIMATIONS
   const LOADING_ANIMATIONS = [
@@ -1078,21 +1078,21 @@ export default function RenderChat({ designId }: { designId: string }) {
 
   return (
     <>
-      {/* Down Arrow Button */}
-      <button 
-        className="absolute left-2 top-2 p-1.5 bg-gray-800/50 hover:bg-gray-700/50 rounded-full transition-colors duration-200 scale-90"
-        onClick={handleClose}
-        title="Close chat"
-      >
-        {config?.downArrowIconStyle ? 
-          React.cloneElement(
-            DOWN_ARROW_ICONS.find(i => i.name === config.downArrowIconStyle)?.icon || 
-            DOWN_ARROW_ICONS[0].icon,
-            { style: { color: titleColor } }
-          )
-          : DOWN_ARROW_ICONS[0].icon
-        }
-      </button>
+      {/* LLM Model Selector - Left side outside chat box */}
+      <div className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10">
+        <select
+          value={selectedModel}
+          onChange={e => setSelectedModel(e.target.value as typeof selectedModel)}
+          className="bg-black/40 text-white rounded-lg px-3 py-1.5 border border-white/20 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 text-sm font-medium"
+          style={{ minWidth: 60 }}
+        >
+          {MODEL_OPTIONS.map(option => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {/* Hidden div to ensure Tailwind generates all possible background classes */}
       <div className="hidden">
@@ -1121,7 +1121,7 @@ export default function RenderChat({ designId }: { designId: string }) {
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 p-0.5 bg-black/30 backdrop-blur flex items-center justify-center rounded-full overflow-hidden">
               {config?.assistantBotLogo ? (
-                <Image 
+                <Image
                   src={config.assistantBotLogo}
                   alt={headerText}
                   width={32}
@@ -1130,7 +1130,7 @@ export default function RenderChat({ designId }: { designId: string }) {
                   unoptimized={typeof config.assistantBotLogo === 'string' && config.assistantBotLogo.startsWith('http')}
                 />
               ) : config?.customHeaderLogo ? (
-                <Image 
+                <Image
                   src={config.customHeaderLogo}
                   alt={headerText}
                   width={32}
@@ -1142,41 +1142,42 @@ export default function RenderChat({ designId }: { designId: string }) {
                 <span className="text-white text-xs">AI</span>
               )}
             </div>
-            <span 
+            <span
               className={`${config.selectedTextStyle ? getTextStyleClass(config.selectedTextStyle) : ''}`}
-              style={{ 
-                color: titleColor, 
+              style={{
+                color: titleColor,
                 fontSize: 14,
                 fontWeight: config.selectedTextStyle === "Bold" ? "bold" : "normal",
                 textTransform: config.selectedTextStyle === "Uppercase" ? "uppercase" : "none"
               }}
             >{headerText}</span>
-            {/* Model Selector Dropdown */}
-            <select
-              value={selectedModel}
-              onChange={e => setSelectedModel(e.target.value as typeof selectedModel)}
-              className="bg-black/40 text-white rounded-lg px-3 py-1.5 border border-white/20 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 text-sm font-medium"
-              style={{ minWidth: 200 }}
-            >
-              {MODEL_OPTIONS.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
           </div>
-          <div className="flex items-center space-x-2">
-            <button 
+          <div className="flex items-center space-x-2 ml-8">
+            <button
               className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
               aria-label="New chat"
             >
-              {config?.newChatIconStyle ? 
+              {config?.newChatIconStyle ?
                 React.cloneElement(
-                  NEW_CHAT_ICONS.find(i => i.name === config.newChatIconStyle)?.icon || 
+                  NEW_CHAT_ICONS.find(i => i.name === config.newChatIconStyle)?.icon ||
                   <Plus size={20} />,
                   { style: { color: titleColor } }
                 )
               : <Plus size={20} color={titleColor} />}
+            </button>
+            <button
+              className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
+              onClick={handleClose}
+              title="Close chat"
+            >
+              {config?.downArrowIconStyle ?
+                React.cloneElement(
+                  DOWN_ARROW_ICONS.find(i => i.name === config.downArrowIconStyle)?.icon ||
+                  DOWN_ARROW_ICONS[0].icon,
+                  { style: { color: titleColor } }
+                )
+                : DOWN_ARROW_ICONS[0].icon
+              }
             </button>
           </div>
         </div>
