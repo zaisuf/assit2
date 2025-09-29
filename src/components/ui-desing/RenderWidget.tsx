@@ -78,7 +78,19 @@ export default function RenderWidget({ config }: { config?: any }) {
   const [inputText, setInputText] = useState("");
 
   // Handle interface toggles with parent window communication
-  const handleInterfaceToggle = (type: 'chat' | 'voice') => {
+  const handleInterfaceToggle = async (type: 'chat' | 'voice') => {
+    if (type === 'voice') {
+      try {
+        // Request microphone permission before opening voice interface
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        // Stop the stream immediately, we just needed permission
+        stream.getTracks().forEach(track => track.stop());
+      } catch (error) {
+        alert('Microphone access is required for voice chat. Please allow microphone access and try again.');
+        return;
+      }
+    }
+
     window.parent.postMessage({
       source: 'assistlore-widget',
       action: `open${type.charAt(0).toUpperCase() + type.slice(1)}`,
@@ -100,7 +112,7 @@ export default function RenderWidget({ config }: { config?: any }) {
   const mergedStyle = { ...baseStyle, ...style1Extra };
 
   return (
-    <div className="fixed bottom-8 left-8 z-10">
+    <div className="fixed bottom-1 left-1 z-10">
       <div
         className={`flex flex-col items-center justify-center ${w.selectedShape || ''} ${w.wedgetBoxSize || ''} shadow-2xl ${borderClass}`}
         style={mergedStyle}
